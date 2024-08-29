@@ -83,13 +83,27 @@ app.on("activate", () => {
 });
 
 ipcMain.handle("fetchBackgroundData", async () => {
-  // Имитация получения данных
+  console.log("***********************8888888")
+  
   return {
     platform: os.platform(),
     release: os.release(),
     additionalData: "Some background data",
   };
 });
+
+
+
+ipcMain.handle("setNumberStore", async (data) => {
+  console.log("BACK:: number cached", data); 
+  const array = [1, 2, 3, 4, 5, 6]; 
+  const rNumber = array[4];
+  return rNumber;  
+});
+
+
+
+
 
 // Register IPC handlers globally
 ipcMain.handle("getSystemInfo", async () => {

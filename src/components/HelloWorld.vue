@@ -1,65 +1,78 @@
-<script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
-import { useStore } from "vuex";
+<script>
+import { mapState } from "vuex";
 
-const store = useStore();
-const count = computed(() => store.state.count);
-const dataFromBackground = computed(() => store.state.dataFromBackground);
+export default {
+  data() {
+    return {
+      systemInfo: null,
+      userData: null,
+      loading: false,
+    };
+  },
+  computed: {
+    ...mapState({
+      count: (state) => state.count,
+      dataFromBackground: (state) => state.dataFromBackground,
+      number: (state) => state.number,
+    }),
+  },
+  methods: {
+    async fetchAndSetNumber() {
+      try {
+        const number = await window.ipcRenderer.invoke("setNumberStore");
+        this.$store.commit("updateNumber", number);
+      } catch (error) {
+        console.error("Error fetching number:", error);
+      }
+    },
+    incrementCount() {
+      this.$store.dispatch("incrementCount");
+    },
 
-const incrementCount = () => {
-  store.dispatch("incrementCount");
+    fetchData() {
+      this.$store.dispatch("fetchDataFromBackground");
+    },
+    getSystemInfo() {
+      if (window.ipcRenderer) {
+        window.ipcRenderer
+          .invoke("getSystemInfo")
+          .then((info) => {
+            this.systemInfo = info;
+          })
+          .catch(console.error);
+      }
+    },
+    async fetchUserData() {
+      this.loading = true;
+      try {
+        this.userData = await window.ipcRenderer.invoke("getUserData");
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        this.loading = false;
+      }
+    },
+  },
+  mounted() {
+    this.fetchUserData();
+  },
 };
-
-const fetchData = () => {
-  store.dispatch("fetchDataFromBackground");
-};
-
-const systemInfo = ref<{
-  platform?: string;
-  release?: string;
-  cpu?: string;
-} | null>(null);
-
-const getSystemInfo = () => {
-  if (window.ipcRenderer) {
-    window.ipcRenderer
-      .invoke("getSystemInfo")
-      .then((info: { platform: string; release: string; cpu: string }) => {
-        systemInfo.value = info;
-      })
-      .catch(console.error);
-  }
-};
-
-const userData = ref<{ id: number; name: string; email: string } | null>(null);
-const loading = ref(false);
-
-const fetchUserData = async () => {
-  loading.value = true;
-  try {
-    userData.value = await window.ipcRenderer.invoke("getUserData");
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-  } finally {
-    loading.value = false;
-  }
-};
-
-onMounted(() => {
-  fetchUserData();
-});
 </script>
-
 <template>
   <div>
-    <button type="button" @click="getSystemInfo">Get System Info</button>
-    <p>{{ systemInfo }}</p>
+    <div>
+      <button @click="fetchAndSetNumber">Set Number222</button>
+      <p>Current Number: {{ number }}</p>
+    </div>
 
     <div>
       <p>Count: {{ count }}</p>
       <button @click="incrementCount">Increment</button>
     </div>
-
+    <div>
+      <button type="button" @click="getSystemInfo">Get System Info</button>
+      <p>{{ systemInfo }}</p>
+    </div>
     <div>
       <button @click="fetchData">Fetch Background Data</button>
       <p>Data from Background: {{ dataFromBackground }}</p>

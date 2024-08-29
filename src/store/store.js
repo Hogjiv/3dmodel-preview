@@ -5,7 +5,8 @@ const store = createStore({
   state() {
     return {
       count: 0,
-      dataFromBackground: null, // Добавим новое состояние
+      dataFromBackground: null, 
+      number: 0
     };
   },
   mutations: {
@@ -14,9 +15,14 @@ const store = createStore({
     },
     setDataFromBackground(state, data) { // Новая мутация
       state.dataFromBackground = data;
+    },
+    updateNumber(state, number) {
+      console.log('STORE::updateNumber');
+      state.number = number;
     }
   },
   actions: {
+    
     incrementCount({ commit }) {
       commit('increment');
     },
