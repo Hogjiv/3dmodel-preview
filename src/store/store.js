@@ -1,5 +1,5 @@
 // ./store/store.ts
-import { createStore } from 'vuex';
+import { createStore } from "vuex";
 
 const store = createStore({
   state() {
@@ -7,55 +7,68 @@ const store = createStore({
       modelPath: "",
       imagePath: "",
       count: 0,
-      dataFromBackground: null, 
-      number: 0
+      dataFromBackground: null,
+      number: 0,
+      scriptRunning: false,
     };
   },
   mutations: {
+    setScriptRunning(state, next) {
+      state.scriptRunning = next;
+      console.log("MUTATION::setScriptRunning");
+    },
     pathSaveModel(state, modelPath) {
       state.pathModel = modelPath;
-  },
-  pathSaveImage(state, imagePath) {
-    state.imagePath = imagePath;
-},
+    },
+
+    pathSaveImage(state, imagePath) {
+      state.imagePath = imagePath;
+    },
     increment(state) {
       state.count += 1;
     },
-    setDataFromBackground(state, data) { // Новая мутация
+    setDataFromBackground(state, data) {
       state.dataFromBackground = data;
     },
     updateNumber(state, number) {
-      console.log('STORE::updateNumber');
+      console.log("STORE::updateNumber");
       state.number = number;
-    }
+    },
   },
   actions: {
-  //   async makePreview({commit}, data) {
-  //     window.API.startScript(data)
-  //     console.log('makePreview from store/ELECTRON')
-  //     commit("pathSaveModel", data.modelPath);
-  //     console.log('commmit Model store/ELECTRON')
-
-  //     commit("pathSaveImage", data.imagePath);
-  //     console.log('Save image???')
-  // },
-  async makePreview({commit}, data) {
-    await window.ipcRenderer.startScript(data);
-    console.log('makePreview from store/ELECTRON');
-    commit("pathSaveModel", data.modelPath);
-    console.log('commmit Model store/ELECTRON');
-
-    commit("pathSaveImage", data.imagePath);
-    console.log('Save image???');
-  },
-
-    incrementCount({ commit }) {
-      commit('increment');
+    async makePreview({ commit }, data) {
+      await window.ipcRenderer.startScript(data);
+      console.log("STORE:: makePreview from store/ELECTRON");
+      commit("pathSaveModel", data.modelPath);
     },
-    async fetchDataFromBackground({ commit }) { // Новое действие
-      const data = await window.ipcRenderer.invoke('fetchBackgroundData');
-      commit('setDataFromBackground', data);
-    }
+
+    // window.API.onScriptRunning(isRunning => {
+    //   console.log('onScriptRunning STORE', isRunning)
+    //   store.commit("setScriptRunning", isRunning)
+    // }),
+
+    // onScriptRunning({commit}, data) {
+    //   console.log('STORE::onScriptRunning ', data)
+    //   store.commit("setScriptRunning", isRunning)
+    // },
+
+    // electronConnect() {}
+    electronConnect({ commit }) {
+      window.ipcRenderer.onScriptRunning((isRunning) => {
+        console.log("STORE::onScriptRunning", isRunning);
+        commit("setScriptRunning", isRunning);
+      });
+    },
+  
+   
+    incrementCount({ commit }) {
+      commit("increment");
+    },
+    async fetchDataFromBackground({ commit }) {
+      // Новое действие
+      const data = await window.ipcRenderer.invoke("fetchBackgroundData");
+      commit("setDataFromBackground", data);
+    },
   },
 });
 

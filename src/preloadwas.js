@@ -5,10 +5,7 @@ contextBridge.exposeInMainWorld('API', {
     chrome: () => process.versions.chrome,
     electron: () => process.versions.electron,
 
-    /*test: (data) => {
-        ipcRenderer.invoke('ping', data)
-        console.log("invoke test")
-    },*/
+    
     startScript: (data) => {
         console.log('Handle scriptRunning invoked_1')
         ipcRenderer.invoke('startScriptEvent', data)
@@ -17,13 +14,13 @@ contextBridge.exposeInMainWorld('API', {
     modelsList: (data) => {
         console.log('Handle scriptRunning invoked_2 modelList')
         ipcRenderer.invoke('modelsListEvent', data)
-    },
-    /*scriptRunning: (data) => {
-        console.log('Handle scriptRunning invoked_3')
-        ipcRenderer.invoke('scriptRunningEvent', data)
-        console.log('Handle scriptRunning invoked_4 scriptRunningEvent')
-    },*/
+    }, 
 
+    // modelsListEvent - name in back
+    //onModelsListEvent - name in store
+
+
+    //scriptRunningEvent, modelsListEvent 
     onScriptRunning: (callback) => ipcRenderer.on('scriptRunningEvent', (_event, value) => callback(value)),
     onModelList: (callback) => ipcRenderer.on('modelsListEvent', (_event, value) => callback(value)),
     onModelImage: (callback) =>  ipcRenderer.on('modelImageEvent', (_event, value) => callback(value)),

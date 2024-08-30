@@ -2,11 +2,9 @@ import { ipcRenderer, contextBridge } from "electron";
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld("ipcRenderer", {
-
-
   on(...args: Parameters<typeof ipcRenderer.on>) {
     const [channel, listener] = args;
- 
+
     return ipcRenderer.on(channel, (event, ...args) =>
       listener(event, ...args)
     );
@@ -23,19 +21,18 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
     const [channel, ...omit] = args;
     return ipcRenderer.invoke(channel, ...omit);
   },
-//   startScript: (data) => {
-//     console.log('PRELOAD::script running!')
-//     ipcRenderer.invoke('startScriptEvent', data) 
-// },
-startScript: (data) => {
-  console.log('PRELOAD::startScript called with data:', data);
-  return ipcRenderer.invoke('startScriptEvent', data);
-},
+  startScript: (data) => {
+    console.log("PRELOAD::startScript called with data:", data);
+    return ipcRenderer.invoke("startScriptEvent", data);
+  },
+
+  onScriptRunning: (callback) =>
+    ipcRenderer.on("scriptRunningEvent", (_event, value) => callback(value)),
+  // onModelList: (data) => ipcRenderer.on('modelsListEvent', (_event, value) => data(value)),
   setNumber: (data) => ipcRenderer.invoke("setNumberStore", data),
   getSystemInfo: () => ipcRenderer.invoke("getSystemInfo"),
-  fetchDataFromBackground: () => ipcRenderer.invoke("fetchBackgroundData"),  
+  fetchDataFromBackground: () => ipcRenderer.invoke("fetchBackgroundData"),
 });
-
 
 // --------- Preload scripts loading ---------
 function domReady(

@@ -2,7 +2,7 @@ import { app, BrowserWindow, shell, ipcMain } from "electron";
 import { fileURLToPath } from "url";
 import path from "path";
 import os from "os";
-import { ScanFiles, bigImage } from "../../src/logic.js"; // Убедитесь, что путь правильный и существует
+import { ScanFiles, bigImage } from "../../src/logic.js";  
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -58,17 +58,33 @@ async function createWindow() {
 }
 
 app.whenReady().then(() => {
+
   ipcMain.handle("startScriptEvent", async (event, data) => {
-    console.log('BACK::script running!') 
+    console.log('BACK::start') 
+    await startScript(data);
+    async function startScript(data) { 
+      console.log('_____111', data)
+      try {
+        event.sender.send("scriptRunningEvent", true);
+        console.log('_____', data)
+      }
+      catch (error) {
+        console.error("Error:", error);}  
+
+      
+    }
+
+
+
     try {
       console.error("sdfdsfd!!", data);
     } catch (error) {
       console.error("Error:", error);
     }
   });
-
+ 
   ipcMain.handle("fetchBackgroundData", async () => {
-    console.log("***********************8888888");
+    console.log("************_____**********");
     return {
       platform: os.platform(),
       release: os.release(),
