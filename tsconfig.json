@@ -11,11 +11,12 @@
     "esModuleInterop": true,
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
-    "noEmit": true
+    "outDir": "dist-electron/main" // Set the output directory to dist-electron/main
   },
   "include": [
     "src",
-    "src/types/electron-env.d.ts" // Ensure this path is correct
+    "src/types/electron-env.d.ts", // Ensure this path is correct
+    "src/**/*"
   ],
   "references": [
     { "path": "./tsconfig.node.json" }

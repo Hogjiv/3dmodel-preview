@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
+
+import scriptUi from './views/scriptUi.vue'
+
 </script>
 
 <template>
   <div>
    
   <HelloWorld msg="Electron + Vite + Vue" />
+  <scriptUi> </scriptUi>
   </div>
 </template>
 

@@ -1,10 +1,9 @@
 import { app, BrowserWindow, shell, ipcMain } from "electron";
-import { createRequire } from "node:module";
-import { fileURLToPath } from "node:url";
-import path from "node:path";
-import os from "node:os";
+import { fileURLToPath } from "url";
+import path from "path";
+import os from "os";
+import { ScanFiles, bigImage } from "../../src/logic.js"; // Убедитесь, что путь правильный и существует
 
-const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 process.env.APP_ROOT = path.join(__dirname, "../..");
@@ -26,7 +25,7 @@ if (!app.requestSingleInstanceLock()) {
   process.exit(0);
 }
 
-let win: BrowserWindow | null = null;
+let win = null;
 const preload = path.join(__dirname, "../preload/index.mjs");
 const indexHtml = path.join(RENDERER_DIST, "index.html");
 
@@ -37,8 +36,7 @@ async function createWindow() {
     webPreferences: {
       preload,
       contextIsolation: true, // Recommended for security
-      // enableRemoteModule: false,
-      nodeIntegration: true, // Should be disabled in production
+      nodeIntegration: false, // Should be disabled in production
     },
   });
 
@@ -59,7 +57,44 @@ async function createWindow() {
   });
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  ipcMain.handle("startScriptEvent", async (event, data) => {
+    console.log('BACK::script running!') 
+    try {
+      console.error("sdfdsfd!!", data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  });
+
+  ipcMain.handle("fetchBackgroundData", async () => {
+    console.log("***********************8888888");
+    return {
+      platform: os.platform(),
+      release: os.release(),
+      additionalData: "Some background data",
+    };
+  });
+
+  ipcMain.handle("setNumberStore", async (event, data) => {
+    console.log("BACK:: number cached", data);
+    const array = [1, 2, 3, 4, 5, 6];
+    const rNumber = array[4];
+    return rNumber;
+  });
+
+  ipcMain.handle("scan-files", async (event, modelPath) => {
+    try {
+      const files = await ScanFiles(modelPath);
+      return files;
+    } catch (error) {
+      console.error("Error scanning files:", error);
+      throw error;
+    }
+  });
+
+  createWindow();
+});
 
 app.on("window-all-closed", () => {
   win = null;
@@ -82,30 +117,6 @@ app.on("activate", () => {
   }
 });
 
-ipcMain.handle("fetchBackgroundData", async () => {
-  console.log("***********************8888888")
-  
-  return {
-    platform: os.platform(),
-    release: os.release(),
-    additionalData: "Some background data",
-  };
-});
-
-
-
-ipcMain.handle("setNumberStore", async (data) => {
-  console.log("BACK:: number cached", data); 
-  const array = [1, 2, 3, 4, 5, 6]; 
-  const rNumber = array[4];
-  return rNumber;  
-});
-
-
-
-
-
-// Register IPC handlers globally
 ipcMain.handle("getSystemInfo", async () => {
   return {
     platform: os.platform(),
@@ -126,16 +137,15 @@ ipcMain.handle("getUserData", async () => {
   });
 });
 
-// Handle opening new windows
 ipcMain.handle("open-win", (_, arg) => {
   const childWindow = new BrowserWindow({
     webPreferences: {
       preload,
       contextIsolation: true,
-      //enableRemoteModule: false,
       nodeIntegration: false,
     },
   });
+
   if (VITE_DEV_SERVER_URL) {
     childWindow.loadURL(`${VITE_DEV_SERVER_URL}#${arg}`);
   } else {

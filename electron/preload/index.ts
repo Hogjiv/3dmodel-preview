@@ -23,14 +23,18 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
     const [channel, ...omit] = args;
     return ipcRenderer.invoke(channel, ...omit);
   },
-
-
+//   startScript: (data) => {
+//     console.log('PRELOAD::script running!')
+//     ipcRenderer.invoke('startScriptEvent', data) 
+// },
+startScript: (data) => {
+  console.log('PRELOAD::startScript called with data:', data);
+  return ipcRenderer.invoke('startScriptEvent', data);
+},
   setNumber: (data) => ipcRenderer.invoke("setNumberStore", data),
   getSystemInfo: () => ipcRenderer.invoke("getSystemInfo"),
   fetchDataFromBackground: () => ipcRenderer.invoke("fetchBackgroundData"),  
 });
-
-
 
 
 // --------- Preload scripts loading ---------

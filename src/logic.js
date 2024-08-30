@@ -1,9 +1,9 @@
-const fs = require("fs");
-const { readdir } = require("fs/promises");
-const axios = require("axios").default;
-const jimp = require("jimp").default;
+import fs from 'fs';
+import { readdir } from 'fs/promises';
+import axios from 'axios';
+import jimp from 'jimp';
 
-async function ScanFiles(modelPath, excluded = []) {
+export async function ScanFiles(modelPath, excluded = []) {
   let files = [];
   try {
     files = await readdir(modelPath);
@@ -32,8 +32,8 @@ async function ScanFiles(modelPath, excluded = []) {
     throw err;
   }
 }
- 
- async function bigImage(modelsList, imagePath, titleText, eventSender) {
+
+export async function bigImage(modelsList, imagePath, titleText, eventSender) {
   const result = [];
   for (const model of modelsList) {
     let imageFound = false;
@@ -43,15 +43,12 @@ async function ScanFiles(modelPath, excluded = []) {
       continue;
     }
 
-    // Define postData function
     async function postData(model) {
       try {
-        // Make an API request to get model data
         const response = await axios.post("https://3ddd.ru/api/models", {
           query: model,
         });
 
-        // Define possible backend URLs
         const backends3dd = [
           "https://b5.3ddd.ru/media/cache/tuk_model_custom_filter_ang_ru/",
           "https://b6.3ddd.ru/media/cache/tuk_model_custom_filter_ang_ru/",
@@ -61,14 +58,6 @@ async function ScanFiles(modelPath, excluded = []) {
         const modelData = response.data.data.models[0];
         if (!modelData) {
           console.log(`No model data found for model: ${model}`);
-
-          // const defaultImageUrl =
-          //   "https://b6.3ddd.ru/media/cache/tuk_model_custom_filter_ang_ru/model_images/0000/0000/6256/6256719.65dfd6cd18ea1.jpeg";
-          // try {
-          //   const response = await axios.get(defaultImageUrl, {
-          //     responseType: "arraybuffer",
-          //   });
-          //   const imgBase64 = Buffer.from(response.data, "binary").toString("base64");
 
           const defaultImageUrl = fs.readFileSync(
             "./src/assets/noImageFound.jpg"
@@ -83,8 +72,8 @@ async function ScanFiles(modelPath, excluded = []) {
             image: "data:image/png;base64," + imgBase64,
           });
 
-          const imageName = "noImageFound.jpg"; // Change this to the actual image name
-          const newImagePath = `${imagePath}/${imageName}`; // Define newImagePath here
+          const imageName = "noImageFound.jpg";
+          const newImagePath = `${imagePath}/${imageName}`;
 
           result.push({
             model,
@@ -92,9 +81,6 @@ async function ScanFiles(modelPath, excluded = []) {
             path: newImagePath,
           });
 
-          // } catch (error) {
-          //   console.error("Error fetching default image:", error);
-          // }
           return;
         }
 
@@ -153,37 +139,15 @@ async function ScanFiles(modelPath, excluded = []) {
           }
         } else {
           console.log(`No image found for model: ${model}`);
-          console.error(error);
         }
       } catch (error) {
         if (error.response && error.response.status === 404) {
           console.log(`No image found for model: ${model}`);
         } else {
-          // HERE MODEL NOT FOUND
           console.log("NOT FOUND ", model);
         }
-
-        // const   defaultImageUrl = fs.readFileSync('./src/assets/noImageFound.jpg')
-        // const imgBase64 = Buffer.from(defaultImageUrl, "binary").toString("base64");
-
-        // eventSender.send("modelImageEvent", {
-        //   modelName: model,
-        //   title: "Model not found",
-        //   image:"data:image/png;base64," + imgBase64,
-        // });
-
-        // const imageName = "noImageFound.jpg"; // Change this to the actual image name
-        // const newImagePath = `${imagePath}/${imageName}`; // Define newImagePath here
-
-        // result.push({
-        //   model,
-        //   title: "NO TITLE",
-        //   path: newImagePath,
-        // });
       }
     }
   }
   return result;
 }
-
-module.exports = { ScanFiles, bigImage };

@@ -36,7 +36,10 @@
     "vue-tsc": "^2.0.6"
   },
   "dependencies": {
+    "@types/node": "^22.5.1",
+    "axios": "^1.7.5",
     "bootstrap": "^5.3.3",
+    "jimp": "^0.22.12",
     "vuex": "^4.0.2"
   }
 }
