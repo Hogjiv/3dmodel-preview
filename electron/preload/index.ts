@@ -31,9 +31,11 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
 
   onScriptRunning: (callback) =>
     ipcRenderer.on("scriptRunningEvent", (_event, value) => callback(value)),
+  onModelImage: (callback) =>
+    ipcRenderer.on("modelImageEvent", (_event, value) => callback(value)),
+  onModelSaved: (callback) =>
+    ipcRenderer.on("modelSavedEvent", (_event, value) => callback(value)),
 
-
-   
 });
 
 // --------- Preload scripts loading ---------

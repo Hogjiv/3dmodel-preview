@@ -3,33 +3,41 @@ import fs from 'fs';
 import { readdir } from 'fs/promises';
 import axios from 'axios';
 import jimp from 'jimp';
-
 export async function ScanFiles(modelPath, excluded = []) {
   let files = [];
+
   try {
     files = await readdir(modelPath);
-    const uniqueFiles = [];
+    const uniqueFiles = new Set();
+
+    // Обрабатываем имена файлов, удаляя нежелательные части
     const replacedFiles = files
       .map((file) =>
         file
-          .replace(/[-(].*|\s+$/gi, "")
+          // Удаляем все, что идет после расширения файла, включая любые слова или пробелы
+          .replace(/[-(].*|\s+.*$/gi, "")
+          // Удаляем расширения и любые пробелы перед ними
           .replace(/\.(rar|zip|jpeg|png|jpg)$/i, "")
           .trim()
       )
       .filter((file) => {
+        // Пропускаем исключенные и повторяющиеся файлы
         if (excluded.includes(file)) {
           return false;
         }
-        if (uniqueFiles.includes(file)) {
+        if (uniqueFiles.has(file)) {
           return false;
         }
-        uniqueFiles.push(file);
+        uniqueFiles.add(file);
         return true;
       });
 
-    return replacedFiles;
+    console.log("LOGIC::all files::", files);
+    console.log("LOGIC::replacedFiles:", replacedFiles, "unique:", [...uniqueFiles]);
+
+    return [...uniqueFiles];
   } catch (err) {
-    console.log("scan files error", err);
+    console.log("LOGIC::scan files error", err);
     throw err;
   }
 }

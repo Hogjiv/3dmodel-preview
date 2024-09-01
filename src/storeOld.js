@@ -6,9 +6,7 @@ const store = createStore({
       modelPath: "",
       imagePath: "",
       modelsList: [],
-      title: "",
-      smallImage: null,
-      bigImage: null,
+      title: "",  
       scriptRunning: false,
     };
   },

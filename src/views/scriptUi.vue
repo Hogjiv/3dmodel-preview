@@ -37,7 +37,7 @@ export default {
   watch: {
     "$store.state.scriptRunning"(newVal) {
       if (newVal === false) {
-        console.log("WATCH");
+        console.log("UI::watcher active. Waching the state of scriptRunning");
         this.showMessage = true;
       }
     },
@@ -53,8 +53,7 @@ export default {
       if (!this.isButtonDisabled()) {
         console.log("fields are correct");
         this.btnActive = true;
-        this.btnDisabled = false;
-        // Set showPopUp to false when fields are correct
+        this.btnDisabled = false; 
         this.showPopUp = false;
       } else {
         this.showPopUp = false;
@@ -75,7 +74,10 @@ export default {
         console.log("ELSE");
       }
     },
-    isButtonDisabled() {
+    isButtonDisabled() { 
+      // UNCOMMMENT for Windows!
+
+
       // const modelPathValid =
       //   this.modelPath.trim() && /^[A-Z]\W+.*$/gm.test(this.modelPath);
       // const imagePathValid =
@@ -337,13 +339,15 @@ p {
 }
 
 .model-image {
-  width: 300px;
-  height: 300px;
+  width: 250px;
+  height: 250px;
+
 }
 
 .card {
-  width: 360px;
-  height: 420px;
+  width: 400px;
+  height: 440px;
+  background-color: darkblue;
 }
 
 .header {
