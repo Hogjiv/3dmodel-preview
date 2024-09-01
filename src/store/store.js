@@ -6,13 +6,27 @@ const store = createStore({
     return {
       modelPath: "",
       imagePath: "",
+      modelsList: [],
+      scriptRunning: false,
+      title: "",  
       count: 0,
       dataFromBackground: null,
       number: 0,
-      scriptRunning: false,
     };
   },
   mutations: {
+    setModeslList(state, data) {
+      state.modelsList = data.map((el) => {
+        if (typeof el === "object") return el;
+        return {
+          name: el,
+          ready: false,
+          title: "",
+          image: null,
+        };
+      });
+    },
+
     setScriptRunning(state, next) {
       state.scriptRunning = next;
       console.log("MUTATION::setScriptRunning");
@@ -40,35 +54,28 @@ const store = createStore({
       await window.ipcRenderer.startScript(data);
       console.log("STORE:: makePreview from store/ELECTRON");
       commit("pathSaveModel", data.modelPath);
+ 
+
+      commit("pathSaveImage", data.imagePath);
+      console.log("Save image???");
     },
-
-    // window.API.onScriptRunning(isRunning => {
-    //   console.log('onScriptRunning STORE', isRunning)
-    //   store.commit("setScriptRunning", isRunning)
-    // }),
-
-    // onScriptRunning({commit}, data) {
-    //   console.log('STORE::onScriptRunning ', data)
-    //   store.commit("setScriptRunning", isRunning)
-    // },
-
-    // electronConnect() {}
+  
     electronConnect({ commit }) {
       window.ipcRenderer.onScriptRunning((isRunning) => {
         console.log("STORE::onScriptRunning", isRunning);
         commit("setScriptRunning", isRunning);
       });
+
+      window.ipcRenderer.onModelList((list) => {
+        store.commit("setModeslList", list);
+        console.log("STORE::setModeslList", isRunning);
+      });
+
+
+
     },
   
-   
-    incrementCount({ commit }) {
-      commit("increment");
-    },
-    async fetchDataFromBackground({ commit }) {
-      // Новое действие
-      const data = await window.ipcRenderer.invoke("fetchBackgroundData");
-      commit("setDataFromBackground", data);
-    },
+    
   },
 });
 

@@ -1,5 +1,4 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+<script setup lang="ts"> 
 
 import scriptUi from './views/scriptUi.vue'
 
@@ -7,8 +6,7 @@ import scriptUi from './views/scriptUi.vue'
 
 <template>
   <div>
-   
-  <HelloWorld msg="Electron + Vite + Vue" />
+    
   <scriptUi> </scriptUi>
   </div>
 </template>

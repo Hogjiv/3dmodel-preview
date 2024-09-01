@@ -26,12 +26,14 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
     return ipcRenderer.invoke("startScriptEvent", data);
   },
 
+  onModelList: (callback) =>
+    ipcRenderer.on("modelsListEvent", (_event, value) => callback(value)),
+
   onScriptRunning: (callback) =>
     ipcRenderer.on("scriptRunningEvent", (_event, value) => callback(value)),
-  // onModelList: (data) => ipcRenderer.on('modelsListEvent', (_event, value) => data(value)),
-  setNumber: (data) => ipcRenderer.invoke("setNumberStore", data),
-  getSystemInfo: () => ipcRenderer.invoke("getSystemInfo"),
-  fetchDataFromBackground: () => ipcRenderer.invoke("fetchBackgroundData"),
+
+
+   
 });
 
 // --------- Preload scripts loading ---------
@@ -63,13 +65,7 @@ const safeDOM = {
     }
   },
 };
-
-/**
- * https://tobiasahlin.com/spinkit
- * https://connoratherton.com/loaders
- * https://projects.lukehaas.me/css-loaders
- * https://matejkustec.github.io/SpinThatShit
- */
+ 
 function useLoading() {
   const className = `loaders-css__square-spin`;
   const styleContent = `

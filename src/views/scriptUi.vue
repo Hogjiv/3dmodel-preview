@@ -8,8 +8,8 @@ export default {
   data() {
     return {
       showProgress: false,
-      modelPath: "",
-      imagePath: "",
+      modelPath: "/Users/hogjiv/test",
+      imagePath: "/Users/hogjiv/test",
       preview: true,
       showMore: false,
       state2: true,

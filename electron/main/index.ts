@@ -2,7 +2,9 @@ import { app, BrowserWindow, shell, ipcMain } from "electron";
 import { fileURLToPath } from "url";
 import path from "path";
 import os from "os";
-import { ScanFiles, bigImage } from "../../src/logic.js";  
+import fs from "fs";
+import { ScanFiles, fetchData } from "../../src/logic.js";  
+import jimp from "jimp";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -58,46 +60,121 @@ async function createWindow() {
 }
 
 app.whenReady().then(() => {
-
   ipcMain.handle("startScriptEvent", async (event, data) => {
-    console.log('BACK::start') 
-    await startScript(data);
-    async function startScript(data) { 
-      console.log('_____111', data)
+    console.log('BACK::start');
+    try {
+      await startScript(data);
+    } catch (err) {
+      console.error("Error in startScript:", err);
+    }
+
+    async function startScript(data) {
+      console.log('BACK::startScript', data);
       try {
         event.sender.send("scriptRunningEvent", true);
-        console.log('_____', data)
+        const {
+          modelPath,
+          imagePath,
+          titleText,
+          softScan = false,
+          hardScan = true,
+        } = data;
+
+        console.log('event.sender.send-scriptRunningEvent!!!!!', data);
+
+        let cache = [];  
+
+        const cachePath = `${imagePath}/scan.json`;
+
+        if (fs.existsSync(cachePath)) {
+          try {
+            if (!softScan && hardScan) {
+              cache = [];
+            } else if (!hardScan) {
+              cache = JSON.parse(fs.readFileSync(cachePath, 'utf8'));
+            }
+          } catch (err) {
+            console.log("SERVER reading cache error!", cachePath, err);
+            cache = null;
+          }
+        }
+
+        const recached = [];
+        if (cache) { 
+          try {
+            for (let i = 0; i < cache.length; i++) {
+              const tests = [
+                `${modelPath}/${cache[i].model}`,
+                `${modelPath}/${cache[i].model}.zip`,
+                `${modelPath}/${cache[i].model}.rar`,
+              ];
+              const modelExists = tests.some((path) => fs.existsSync(path));
+              const imgExists = fs.existsSync(cache[i].path);
+              if (!modelExists) continue;
+              if (!imgExists) continue;
+
+              const img = await jimp.read(cache[i].path);
+              const img64 = await img.getBase64Async(jimp.MIME_PNG);
+
+              recached.push({
+                ...cache[i],
+                ready: true,
+                image: img64,
+              });
+            }
+          } catch (err) {
+            console.log("problem", err);
+          }
+          console.log(cache);
+
+          if (!softScan && !hardScan) {
+            event.sender.send("modelsListEvent", recached);
+            console.log('BACK::recached',recached);
+            event.sender.send("scriptRunningEvent", false);
+            return;
+          }
+
+          const excluded = [
+            ...(softScan && recached.length
+              ? recached.map((el) => el.model)
+              : []),
+            "scan.json",
+          ];
+          console.log(excluded, "-----------------------");
+
+          const modelsList = await ScanFiles(modelPath, excluded);
+          console.log(modelsList, "this is modelsList ????");
+
+          event.sender.send("modelsListEvent", [...recached, ...modelsList]);
+
+          const completeList = await fetchData(
+            modelsList,
+            imagePath,
+            titleText,
+            event.sender
+          );
+
+          const nextCache = [
+            ...recached.map((el) => ({
+              model: el.model,
+              path: el.path,
+              title: el.title,
+            })),
+            ...completeList,
+          ];
+          console.log(nextCache);
+          fs.writeFileSync(cachePath, JSON.stringify(nextCache));
+          console.log("SERVER ..wwait writing to json..");
+
+          event.sender.send("scriptRunningEvent", false);
+        }
+      } catch (err) {
+        console.error("Error in startScript:", err);
       }
-      catch (error) {
-        console.error("Error:", error);}  
-
-      
-    }
-
-
-
-    try {
-      console.error("sdfdsfd!!", data);
-    } catch (error) {
-      console.error("Error:", error);
     }
   });
- 
-  ipcMain.handle("fetchBackgroundData", async () => {
-    console.log("************_____**********");
-    return {
-      platform: os.platform(),
-      release: os.release(),
-      additionalData: "Some background data",
-    };
-  });
-
-  ipcMain.handle("setNumberStore", async (event, data) => {
-    console.log("BACK:: number cached", data);
-    const array = [1, 2, 3, 4, 5, 6];
-    const rNumber = array[4];
-    return rNumber;
-  });
+});
+  
 
   ipcMain.handle("scan-files", async (event, modelPath) => {
     try {
@@ -110,7 +187,7 @@ app.whenReady().then(() => {
   });
 
   createWindow();
-});
+ 
 
 app.on("window-all-closed", () => {
   win = null;

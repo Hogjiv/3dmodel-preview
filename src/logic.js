@@ -1,3 +1,4 @@
+ 
 import fs from 'fs';
 import { readdir } from 'fs/promises';
 import axios from 'axios';
@@ -33,7 +34,8 @@ export async function ScanFiles(modelPath, excluded = []) {
   }
 }
 
-export async function bigImage(modelsList, imagePath, titleText, eventSender) {
+
+export async function fetchData(modelsList, imagePath, titleText, eventSender) {
   const result = [];
   for (const model of modelsList) {
     let imageFound = false;
