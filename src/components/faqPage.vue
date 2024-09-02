@@ -23,7 +23,7 @@ export default {
         <div class="d-flex flex-row justify-content-between align-items-center mb-3">
           <h3 class="ss ">How to use a script</h3>
           <div class="btn btn-exit align-items-center justify-content-center" @click="toggleFaqContent">
-            <img src="../../public/exit.svg"  width="20" height="20" style="fill: white; margin-left: -2px;" />
+            <img src="/exit.svg"  width="20" height="20" style="fill: white; margin-left: -2px;" />
           </div>
         </div>
 

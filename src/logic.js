@@ -70,7 +70,7 @@ export async function fetchData(modelsList, imagePath, titleText, eventSender) {
           console.log(`No model data found for model: ${model}`);
 
           const defaultImageUrl = fs.readFileSync(
-            "./src/assets/noImageFound.jpg"
+            "/noImageFound.jpg"
           );
           const imgBase64 = Buffer.from(defaultImageUrl, "binary").toString(
             "base64"

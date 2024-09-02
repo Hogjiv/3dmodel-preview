@@ -21,8 +21,8 @@ async function createWindow() {
   const win = new BrowserWindow({
     width: 600,
     height: 700,
-    minWidth: 450,
-    icon: "./public/logo.png",
+    minWidth: 400,
+    icon: "/logo.svg",
     // titleBarStyle: 'customButtonsOnHover',
     webPreferences: {
       preload: path.join(__dirname, "../src/preload.js"),
