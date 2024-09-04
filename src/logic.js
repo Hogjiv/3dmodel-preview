@@ -17,7 +17,7 @@ export async function ScanFiles(modelPath, excluded = []) {
           // Удаляем все, что идет после расширения файла, включая любые слова или пробелы
           .replace(/[-(].*|\s+.*$/gi, "")
           // Удаляем расширения и любые пробелы перед ними
-          .replace(/\.(rar|zip|jpeg|png|jpg)$/i, "")
+          .replace(/\.(rar|zip|7z|jpeg|png|jpg)$/i, "")
           .trim()
       )
       .filter((file) => {
@@ -82,7 +82,7 @@ export async function fetchData(modelsList, imagePath, titleText, eventSender) {
             image: "data:image/png;base64," + imgBase64,
           });
 
-          const imageName = "noImageFound.jpg";
+          const imageName = "/noImageFound.jpg";
           const newImagePath = `${imagePath}/${imageName}`;
 
           result.push({

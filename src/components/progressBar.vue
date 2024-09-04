@@ -37,7 +37,7 @@ export default {
     <p class="bold-text  font-size-24   font-color-pink text-uppercase"> {{ totalReadyModels.notReadyModels }} models from {{ totalReadyModels.totalModels }} are not ready</p>
   </div>
   <div v-else>
-    123
+   <p> else</p>>
   </div>
 
 </template>

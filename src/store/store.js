@@ -18,6 +18,7 @@ const store = createStore({
   },
     setModeslList(state, data) {
       state.modelsList = data.map((el) => {
+        console.log('!!!!!!!!!!!!!!!!')
         if (typeof el === "object") return el;
         return {
           name: el,
@@ -28,10 +29,12 @@ const store = createStore({
       });
     },
     modelImage(state, data) {
+
       state.modelsList = state.modelsList.map((el) => {
         if (el.name !== data.modelName) return el;
         el.title = data.title;
         el.image = data.image;
+        console.log ("99999999")
         return el;
       });
     },
@@ -39,6 +42,7 @@ const store = createStore({
       state.modelsList = state.modelsList.map((el) => {
         if (el.name !== modelName) return el;
         el.ready = true;
+        console.log ("0000000")
         return el;
       });
     },

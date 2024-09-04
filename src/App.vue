@@ -1,39 +1,11 @@
-<script setup lang="ts"> 
-
-import scriptUi from './views/scriptUi.vue'
-
+<script setup lang="ts">
+import scriptUi from "./views/scriptUi.vue";
 </script>
 
 <template>
-  <div>
-    
   <scriptUi> </scriptUi>
-  </div>
 </template>
 
 <style>
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-
-.logo.electron:hover {
-  filter: drop-shadow(0 0 2em #9FEAF9);
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap");
 </style>

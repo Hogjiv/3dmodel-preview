@@ -3,6 +3,9 @@
 import progressBar from "../components/progressBar.vue";
 import checkBox from "../components/checkBox.vue";
 import faqPage from "../components/faqPage.vue";
+//import footerComponent from "../components/footerComponent.vue";
+
+import cardComponent from "../components/cardComponent.vue";
 
 export default {
   data() {
@@ -30,6 +33,8 @@ export default {
 
   components: {
     //progressWindow,
+    //footerComponent,
+    cardComponent,
     faqPage,
     progressBar,
     checkBox,
@@ -132,10 +137,9 @@ export default {
       <div
         class="container-lg d-flex flex-row justify-content-center align-items-center menu"
       >
-        <div class="row col-12 d-flex justify-content-center">
-          <div
-            class="d-flex flex-column col-lg-2 col-md-12 col-sm-12 col-12 justify-content-center align-items-center mt-3 mb-3 order-lg-1 order-sm-2 order-2 mt-4 mt-md-4 mt-lg-0"
-          >
+        <div class="row col-12  d-flex justify-content-center   ">
+          <!-- buttons Hard and Soft -->
+          <div  class="d-flex      flex-column col-lg-2 col-md-12 col-sm-12 col-12 justify-content-center align-items-center mt-3 mb-3 order-lg-1 order-sm-2 order-2 mt-4 mt-md-4 mt-lg-0">
             <div class="d-flex mb-3 mb-md-3 mb-lg-3">
               <checkBox v-model="softScan" />
               <p class="font-size-16 mx-2">Soft scan</p>
@@ -146,9 +150,8 @@ export default {
             </div>
           </div>
 
-          <div
-            class="d-flex flex-column justify-content-center align-items-center col-lg-8 col-md-12 col-sm-12 col-12 order-lg-2 order-sm-1 order-1"
-          >
+          <!-- buttons for insert path -->
+          <div class="d-flex cc flex-column justify-content-center align-items-center col-lg-8 col-md-12 col-sm-12 col-12 order-lg-2 order-sm-1 order-1">
             <input
               type="text"
               v-model="modelPath"
@@ -165,6 +168,7 @@ export default {
             />
           </div>
 
+          <!-- FAQ block -->
           <div
             class="d-flex faq flex-column col-md col-lg-2 col-sm-6 align-items-center align-self-center justify-content-center order-lg-3 order-sm-3 order-3"
           >
@@ -178,11 +182,13 @@ export default {
         </div>
       </div>
 
-      <div
-        class="containter d-flex flex-column justify-content-center align-items-center"
-      >
-        <div class="btn-block d-flex flex-column">
-          <div class="d-flex justify-content-center align-items-center">
+      <!-- main container -->
+       <div class="d-flex flex-column  w-100">  
+      <!-- <div
+        class="containter tt d-flex flex-column justify-content-center align-items-center"
+      >  -->
+          <!-- Big Btn block -->
+          <div class="d-flex justify-content-center align-items-center ee ">
             <button
               class="big-btn mt-3 col-12 align-items-center"
               :class="{
@@ -206,7 +212,10 @@ export default {
             </div>
           </div>
 
-          <div v-if="btnActive">
+
+       <!-- all block with images (if btnActive) -->
+          <div v-if="btnActive " class="yy container w-100">
+               <!-- Show progress => show less BTN -->
             <div
               class="d-flex col-12 justify-content-center align-items-center"
             >
@@ -221,12 +230,13 @@ export default {
                   <span v-else class="text-white"> Show less </span>
                 </p>
               </button>
-            </div>
+            </div> 
 
-            <div v-if="!showProgress" class="preview-window mt-5">
+            <div v-if="!showProgress" class="preview-window mt-5  ">
+              <!-- show progress status -->
               <div v-if="$store.state.scriptRunning">
                 <progressBar
-                  class="my-4 d-flex justify-content-center align-items-center"
+                  class="my-4 tt d-flex justify-content-center align-items-center"
                 >
                 </progressBar>
               </div>
@@ -236,7 +246,9 @@ export default {
               >
                 Finish!
               </h2>
-              <div class="container w-100">
+
+              <cardComponent class="pp "> </cardComponent>
+              <!-- <div class="container w-100">
                 <div class="row justify-content-center align-items-center">
                   <div
                     class="card col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-center mt-4 mx-3"
@@ -260,16 +272,46 @@ export default {
                     </p>
                   </div>
                 </div>
-              </div>
-            </div>
+              </div>-->
+            </div> 
+          
           </div>
-        </div>
+<!-- 
+        <footerComponent class="footer"> </footerComponent> -->
+         
+        
       </div>
+
+
     </div>
+    
   </div>
 </template>
 
 <style>
+.pp{
+  background-color: darkmagenta;
+   
+}
+.tt{
+  background-color: tomato;
+}
+.ee {
+  background-color: yellow;
+}
+.cc {
+  background-color: #2b5b9e;
+}
+.yy {
+  background-color: darkcyan;
+}
+.rr {
+  background-color: #7ec2ac;
+}
+.footer {
+  width: 100%;
+  position: absolute;
+}
 .popUp {
   background-color: #7e7e7ec7;
   max-width: 200px;
@@ -325,8 +367,8 @@ input {
   padding-top: 10px;
   margin-bottom: 40px;
   padding-bottom: 60px;
-  border-radius: 25px;
-  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  box-shadow: 0px 2px 5px 0px rgba(3, 2, 2, 0.25);
 }
 
 containter {
@@ -338,17 +380,8 @@ p {
   margin-bottom: 0px !important;
 }
 
-.model-image {
-  width: 250px;
-  height: 250px;
 
-}
 
-.card {
-  width: 400px;
-  height: 440px;
-  background-color: darkblue;
-}
 
 .header {
   background-color: #f1f1f1;

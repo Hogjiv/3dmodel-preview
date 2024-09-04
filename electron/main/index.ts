@@ -42,7 +42,11 @@ const indexHtml = path.join(RENDERER_DIST, "index.html");
 async function createWindow() {
   win = new BrowserWindow({
     title: "Main window",
-    icon: path.join(process.env.VITE_PUBLIC, "favicon.ico"),
+    icon: " exit.png",
+    // icon: path.join(process.env.VITE_PUBLIC,  "./vite.svg" ), 
+    width: 600,
+    height: 700,
+    minWidth: 450,
     webPreferences: {
       preload,
       contextIsolation: true, // Рекомендуется для безопасности
@@ -53,7 +57,7 @@ async function createWindow() {
   // Загрузка URL или файла в зависимости от режима разработки
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL);
-    win.webContents.openDevTools(); // Открытие инструментов разработчика в режиме разработки
+    win.webContents.openDevTools();  
   } else {
     win.loadFile(indexHtml);
   }
