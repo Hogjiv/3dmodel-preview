@@ -1,8 +1,7 @@
- 
-import fs from 'fs';
-import { readdir } from 'fs/promises';
-import axios from 'axios';
-import jimp from 'jimp';
+import fs from "fs";
+import { readdir } from "fs/promises";
+import axios from "axios";
+import jimp from "jimp";
 export async function ScanFiles(modelPath, excluded = []) {
   let files = [];
 
@@ -17,7 +16,7 @@ export async function ScanFiles(modelPath, excluded = []) {
           // Удаляем все, что идет после расширения файла, включая любые слова или пробелы
           .replace(/[-(].*|\s+.*$/gi, "")
           // Удаляем расширения и любые пробелы перед ними
-          .replace(/\.(rar|zip|7z|jpeg|png|jpg)$/i, "")
+          .replace(/\.(rar|7z|zip|jpeg|png|jpg)$/i, "")
           .trim()
       )
       .filter((file) => {
@@ -33,7 +32,9 @@ export async function ScanFiles(modelPath, excluded = []) {
       });
 
     console.log("LOGIC::all files::", files);
-    console.log("LOGIC::replacedFiles:", replacedFiles, "unique:", [...uniqueFiles]);
+    console.log("LOGIC::replacedFiles:", replacedFiles, "unique:", [
+      ...uniqueFiles,
+    ]);
 
     return [...uniqueFiles];
   } catch (err) {
@@ -41,7 +42,6 @@ export async function ScanFiles(modelPath, excluded = []) {
     throw err;
   }
 }
-
 
 export async function fetchData(modelsList, imagePath, titleText, eventSender) {
   const result = [];
@@ -70,7 +70,7 @@ export async function fetchData(modelsList, imagePath, titleText, eventSender) {
           console.log(`No model data found for model: ${model}`);
 
           const defaultImageUrl = fs.readFileSync(
-            "/noImageFound.jpg"
+            "./src/assets/noImageFound.jpg"
           );
           const imgBase64 = Buffer.from(defaultImageUrl, "binary").toString(
             "base64"
@@ -82,7 +82,7 @@ export async function fetchData(modelsList, imagePath, titleText, eventSender) {
             image: "data:image/png;base64," + imgBase64,
           });
 
-          const imageName = "/noImageFound.jpg";
+          const imageName = "./src/assets/noImageFound.jpg";
           const newImagePath = `${imagePath}/${imageName}`;
 
           result.push({

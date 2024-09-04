@@ -1,9 +1,8 @@
 <script>
-// import progressWindow from "@/components/progressWindow.vue";
 import progressBar from "../components/progressBar.vue";
 import checkBox from "../components/checkBox.vue";
 import faqPage from "../components/faqPage.vue";
-//import footerComponent from "../components/footerComponent.vue";
+import footerComponent from "../components/footerComponent.vue";
 
 import cardComponent from "../components/cardComponent.vue";
 
@@ -32,8 +31,7 @@ export default {
   },
 
   components: {
-    //progressWindow,
-    //footerComponent,
+    footerComponent,
     cardComponent,
     faqPage,
     progressBar,
@@ -58,7 +56,7 @@ export default {
       if (!this.isButtonDisabled()) {
         console.log("fields are correct");
         this.btnActive = true;
-        this.btnDisabled = false; 
+        this.btnDisabled = false;
         this.showPopUp = false;
       } else {
         this.showPopUp = false;
@@ -79,10 +77,8 @@ export default {
         console.log("ELSE");
       }
     },
-    isButtonDisabled() { 
+    isButtonDisabled() {
       // UNCOMMMENT for Windows!
-
-
       // const modelPathValid =
       //   this.modelPath.trim() && /^[A-Z]\W+.*$/gm.test(this.modelPath);
       // const imagePathValid =
@@ -115,80 +111,88 @@ export default {
 
 <template>
   <div class="header d-flex justify-content-center align-items-center">
-    <h2 class="bold-text font-color-dark text-uppercase">Preview maker</h2>
+    <h2 class="bold-text  text-uppercase">Preview maker</h2>
   </div>
 
   <div v-if="faqOpen">
     <div
-      class="modal d-flex"
+      class="modal d-flex  "
       id="exampleModal"
       tabindex="-1"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
     >
-      <faqPage @btnClosed="btnClosed"> sdf </faqPage>
+      <faqPage @btnClosed="btnClosed"> </faqPage>
     </div>
   </div>
 
-  <div class="fluid-container d-flex flex-row">
-    <div
-      class="container-lg d-flex flex-column justify-content-center align-items-center"
-    >
+  <div class="d-flex flex-column">
+    <div class="fluid-container d-flex flex-row">
       <div
-        class="container-lg d-flex flex-row justify-content-center align-items-center menu"
+        class="container-lg d-flex flex-column justify-content-center align-items-center"
       >
-        <div class="row col-12  d-flex justify-content-center   ">
-          <!-- buttons Hard and Soft -->
-          <div  class="d-flex      flex-column col-lg-2 col-md-12 col-sm-12 col-12 justify-content-center align-items-center mt-3 mb-3 order-lg-1 order-sm-2 order-2 mt-4 mt-md-4 mt-lg-0">
-            <div class="d-flex mb-3 mb-md-3 mb-lg-3">
-              <checkBox v-model="softScan" />
-              <p class="font-size-16 mx-2">Soft scan</p>
-            </div>
-            <div class="d-flex">
-              <checkBox v-model="hardScan" />
-              <p class="font-size-16 mx-1">Hard scan</p>
-            </div>
-          </div>
-
-          <!-- buttons for insert path -->
-          <div class="d-flex cc flex-column justify-content-center align-items-center col-lg-8 col-md-12 col-sm-12 col-12 order-lg-2 order-sm-1 order-1">
-            <input
-              type="text"
-              v-model="modelPath"
-              class="input-form"
-              @input="saveDataModel"
-              placeholder="Path for load models"
-            />
-            <input
-              type="text"
-              v-model="imagePath"
-              class="input-form mt-3"
-              @input="saveDataImage"
-              placeholder="Path for save image"
-            />
-          </div>
-
-          <!-- FAQ block -->
-          <div
-            class="d-flex faq flex-column col-md col-lg-2 col-sm-6 align-items-center align-self-center justify-content-center order-lg-3 order-sm-3 order-3"
-          >
-            <button
-              class="btn btn-faq bold-text font-size-32"
-              @click="faqOpen = !faqOpen"
+        <div
+          class="container-lg d-flex flex-row justify-content-center align-items-center menu"
+        >
+          <div class="row col-12 d-flex justify-content-center">
+            <!-- buttons Hard and Soft -->
+            <div
+              class="d-flex flex-column col-lg-2 col-md-12 col-sm-12 col-12 justify-content-center align-items-center mt-3 mb-3 order-lg-1 order-sm-2 order-2 mt-4 mt-md-4 mt-lg-0"
             >
-              FAQ
-            </button>
+              <div class="d-flex mb-3 mb-md-3 mb-lg-3">
+                <checkBox v-model="softScan" />
+                <p class="font-size-16 mx-2">Soft scan</p>
+              </div>
+              <div class="d-flex">
+                <checkBox v-model="hardScan" />
+                <p class="font-size-16 mx-1">Hard scan</p>
+              </div>
+            </div>
+
+            <!-- buttons for insert path -->
+            <div
+              class="d-flex cc flex-column justify-content-center align-items-center col-lg-8 col-md-12 col-sm-12 col-12 order-lg-2 order-sm-1 order-1"
+            >
+              <input
+                type="text"
+                v-model="modelPath"
+                class="input-form"
+                @input="saveDataModel"
+                placeholder="Path for load models"
+              />
+              <input
+                type="text"
+                v-model="imagePath"
+                class="input-form mt-3"
+                @input="saveDataImage"
+                placeholder="Path for save image"
+              />
+            </div>
+
+            <!-- FAQ block -->
+
+            <div
+              class="d-flex flex-column col-md col-lg-2 col-sm-6 align-items-center align-self-center justify-content-center order-lg-3 order-sm-3 order-3 mt-4 mt-md-4 mt-lg-0"
+            >
+              <div>
+                <p
+                  class="bold-text font-size-32 faq-btn align-items-center justify-content-center d-flex"
+                  @click="faqOpen = !faqOpen"
+                >
+                  FAQ
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- main container -->
-       <div class="d-flex flex-column  w-100">  
-      <!-- <div
+        <!-- main container -->
+        <div class="d-flex flex-column w-100">
+          <!-- <div
         class="containter tt d-flex flex-column justify-content-center align-items-center"
       >  -->
           <!-- Big Btn block -->
-          <div class="d-flex justify-content-center align-items-center ee ">
+          <div class="d-flex justify-content-center align-items-center">
             <button
               class="big-btn mt-3 col-12 align-items-center"
               :class="{
@@ -212,10 +216,9 @@ export default {
             </div>
           </div>
 
-
-       <!-- all block with images (if btnActive) -->
-          <div v-if="btnActive " class="yy container w-100">
-               <!-- Show progress => show less BTN -->
+          <!-- all block with images (if btnActive) -->
+          <div v-if="btnActive" class="yy container w-100">
+            <!-- Show progress => show less BTN -->
             <div
               class="d-flex col-12 justify-content-center align-items-center"
             >
@@ -230,15 +233,12 @@ export default {
                   <span v-else class="text-white"> Show less </span>
                 </p>
               </button>
-            </div> 
+            </div>
 
-            <div v-if="!showProgress" class="preview-window mt-5  ">
+            <div v-if="!showProgress" class="preview-window mt-5">
               <!-- show progress status -->
               <div v-if="$store.state.scriptRunning">
-                <progressBar
-                  class="my-4 tt d-flex justify-content-center align-items-center"
-                >
-                </progressBar>
+                <progressBar> </progressBar>
               </div>
               <h2
                 v-if="!$store.state.scriptRunning"
@@ -247,70 +247,32 @@ export default {
                 Finish!
               </h2>
 
-              <cardComponent class="pp "> </cardComponent>
-              <!-- <div class="container w-100">
-                <div class="row justify-content-center align-items-center">
-                  <div
-                    class="card col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-center mt-4 mx-3"
-                    v-for="model in $store.state.modelsList"
-                    :key="model.name"
-                  >
-                    <img
-                      class="model-image my-3"
-                      v-if="model.image"
-                      :src="model.image"
-                    />
-                    <p
-                      class="font-size-14 font-color-dark medium-text text-center"
-                    >
-                      {{ model.name }}
-                    </p>
-                    <p
-                      class="font-size-14 font-color-pink text-center medium-text"
-                    >
-                      {{ model.title }}
-                    </p>
-                  </div>
-                </div>
-              </div>-->
-            </div> 
-          
+              <cardComponent class="pp"> </cardComponent>
+              　
+            </div>
           </div>
-<!-- 
-        <footerComponent class="footer"> </footerComponent> -->
-         
-        
+        </div>
       </div>
-
-
     </div>
-    
+    　 <footerComponent class="footer"> </footerComponent>　
   </div>
 </template>
 
 <style>
-.pp{
-  background-color: darkmagenta;
-   
+.faq-btn {
+  cursor: pointer;
+  border: #888888 2px solid;
+  border-radius: 8px;
+  width: 100px;
+  height: 100px;
 }
-.tt{
-  background-color: tomato;
+.faq-btn:hover {
+  background-color: #9a9a9a;
 }
-.ee {
-  background-color: yellow;
-}
-.cc {
-  background-color: #2b5b9e;
-}
-.yy {
-  background-color: darkcyan;
-}
-.rr {
-  background-color: #7ec2ac;
-}
+
 .footer {
-  width: 100%;
-  position: absolute;
+  position: relative;
+  bottom: 0px;
 }
 .popUp {
   background-color: #7e7e7ec7;
@@ -327,11 +289,11 @@ export default {
 }
 
 .modal {
-  position: absolute;
+  background-color: rgba(0, 0, 0, 0.359);
+  /* position: relative;
   display: flex;
-  right: 0;
-  left: auto;
-  max-width: 450px;
+  right: 0px;
+  max-width: 450px; */
 }
 
 @keyframes slideIn {
@@ -379,9 +341,6 @@ p {
   margin: 0px !important;
   margin-bottom: 0px !important;
 }
-
-
-
 
 .header {
   background-color: #f1f1f1;

@@ -6,7 +6,7 @@ export default {
 </script>
 
 <template>
-  <div class="   font-color-gray  mt-5 font-size-14 normal-text text-center mb-3">
+  <div class="   font-color-gray   font-size-14 normal-text text-center ">
       Questions to
       <a href="mailto:hogjiv@gmail.com">
         hhyperplace@gmail.com </a> <br>
