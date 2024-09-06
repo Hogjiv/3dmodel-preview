@@ -9,20 +9,19 @@ export default {
   methods: {
     toggleFaqContent() {
       this.showFaqContent = !this.showFaqContent;
-      this.$emit("btnClosed");
-      console.log("clicked!!!!");
+      this.$emit("btnClosed"); 
     },
+    
   },
 };
 </script>
 
 <template>
   <div v-if="!showFaqContent" class="d-flex flex-row">
-    <!-- <div class="screen-block"> -->
-      <div class="faqContent texts">
+      <div class="faqContent texts col-sm-12 col-md-4 col-lg-4">
         <div class="d-flex">
 
-          <div class="btn  " @click="toggleFaqContent">
+          <div class="btn  " @click="toggleFaqContent" > 
             <img
               src="/close-square.svg"
               width="30"
@@ -58,15 +57,16 @@ export default {
             using "Show progress". <br />
             6. A table of scanned models will appear. Scanning may take time,
             and progress is shown in the progress bar above the table. <br />
-            7. <b class="font-color-pink">Do not delete the scan.JSON file.</b>
+            7. <b class="font-color-pink"> Do not delete the scan.JSON file in your folder.</b>
             <br />
+            <p class="mt-3"> 
             * Supports both archived and unarchived files. <br />
             ** Sometimes scans take longer if the site doesn't respond well; you
             might need to reload and try again.
           </p>
+          </p>
         </div>
-      </div>
-    <!-- </div> -->
+      </div> 
   </div>
 </template>
 

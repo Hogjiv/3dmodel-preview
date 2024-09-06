@@ -57,10 +57,12 @@ export default {
   background-color: rgb(207, 207, 207);
   border-radius: 18px;
   border: #898989 1px solid;
-  height: 25px;
+  height: 17px;
+  min-width: 300px;
 }
 .progress {
-  background-color: #c97191 !important;
+ background-color:   #C97191 !important;
+  transition: width 0.5s ease-in-out;  
   height: 100% !important;
   border-radius: 18px !important; 
 }

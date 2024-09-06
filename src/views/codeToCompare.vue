@@ -3,6 +3,7 @@ import progressBar from "../components/progressBar.vue";
 import checkBox from "../components/checkBox.vue";
 import faqPage from "../components/faqPage.vue";
 import footerComponent from "../components/footerComponent.vue";
+
 import cardComponent from "../components/cardComponent.vue";
 
 export default {
@@ -59,26 +60,14 @@ export default {
         this.showPopUp = false;
       } else {
         this.showPopUp = false;
-      
         setTimeout(() => {
-       //  this.showPopUp = true;
-       console.log('!!!ask new notification!!!!')
-       const payload = {
-        message: `Copy path from PC which looks like 'D/: ....'`,
-        type: "notification",
-      };
-      this.$store.dispatch("notifications/notificationVisible", payload);
- 
+          this.showPopUp = true;
           this.btnDisabled = true;
           this.btnActive = false;
-        }, 2);
+        }, 1);
         console.log("ERROR");
       }
-      this.$store.dispatch("notifications/notificationVisible", {
-          message: " Copy path from PC which looks like 'D/: ....",
-          type: "notification",
-        });
-      
+
       // check if showProgress is active
       if (this.btnActive === true) {
         this.makePreview();
@@ -90,11 +79,11 @@ export default {
     },
     isButtonDisabled() {
       // UNCOMMMENT for Windows!
-      const modelPathValid =
-        this.modelPath.trim() && /^[A-Z]\W+.*$/gm.test(this.modelPath);
-      const imagePathValid =
-        this.imagePath.trim() && /^[A-Z]\W+.*$/gm.test(this.imagePath);
-      return !modelPathValid || !imagePathValid;
+      // const modelPathValid =
+      //   this.modelPath.trim() && /^[A-Z]\W+.*$/gm.test(this.modelPath);
+      // const imagePathValid =
+      //   this.imagePath.trim() && /^[A-Z]\W+.*$/gm.test(this.imagePath);
+      // return !modelPathValid || !imagePathValid;
     },
 
     makePreview() {
@@ -222,9 +211,9 @@ export default {
                 }}
               </p>
             </button>
-            <!-- <div class="popUp" v-if="showPopUp">
+            <div class="popUp" v-if="showPopUp">
               Copy path from PC which looks like 'D/: ....'
-            </div> -->
+            </div>
           </div>
 
           <!-- all block with images (if btnActive) -->
@@ -301,6 +290,10 @@ export default {
 
 .modal {
   background-color: rgba(0, 0, 0, 0.359);
+  /* position: relative;
+  display: flex;
+  right: 0px;
+  max-width: 450px; */
 }
 
 @keyframes slideIn {

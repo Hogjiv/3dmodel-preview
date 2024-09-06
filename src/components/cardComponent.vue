@@ -28,9 +28,7 @@ export default {
 containter {
   padding: 0px 0px 0px 0px;
 }
-.oo {
-  background-color: darkgreen;
-}
+ 
 
 .kartochka {
   flex-direction: column;
@@ -43,7 +41,8 @@ containter {
   min-height: 380px;
   max-width: 350px;
   max-height: 380px;
-  background-color: darkblue;
+  background-color:#dfdfdf;
+  border-radius: 15px;
 }
 .model-image {
   width: 300px;

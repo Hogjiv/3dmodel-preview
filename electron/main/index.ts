@@ -45,8 +45,9 @@ async function createWindow() {
     icon: " exit.png",
     // icon: path.join(process.env.VITE_PUBLIC,  "./vite.svg" ), 
     width: 600,
-    height: 700,
+    height: 750,
     minWidth: 450,
+    minHeight: 340,
     webPreferences: {
       preload,
       contextIsolation: true, // Рекомендуется для безопасности
