@@ -38,14 +38,14 @@ export default {
 
 <template>
   <div v-if="isVisible">
-    <div class="d-flex flex-column justify-content-center align-items-center">
-      <p class="bold-text font-size-24 font-color-pink text-uppercase">
+    <div class="d-flex flex-column justify-content-center align-items-center d ">
+      <p class="bold-text font-size-24 font-color-pink text-uppercase   justify-content-center text-center align-items-center">
         {{ totalReadyModels.notReadyModels }} models from
         {{ totalReadyModels.totalModels }} are not ready
       </p>
-      <div class="scale col-md-6 col-lg-6 col-sm-10">
+      <div class="scale col-md-6 col-lg-6 col-sm-10 m-sm-3">
         <div
-          class="progress"
+          class="progress dd"
           :style="{ width: progressBarPersentage + '%' }"
         ></div>
       </div>
@@ -53,12 +53,15 @@ export default {
   </div>
 </template>
 <style>
+.dd{
+  background-color: darkcyan;
+}
 .scale {
   background-color: rgb(207, 207, 207);
   border-radius: 18px;
   border: #898989 1px solid;
   height: 17px;
-  min-width: 300px;
+  min-width: 350px;
 }
 .progress {
  background-color:   #C97191 !important;

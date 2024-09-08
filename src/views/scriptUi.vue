@@ -59,26 +59,28 @@ export default {
         this.showPopUp = false;
       } else {
         this.showPopUp = false;
-      
+
         setTimeout(() => {
-       //  this.showPopUp = true;
-       console.log('!!!ask new notification!!!!')
-       const payload = {
-        message: `Copy path from PC which looks like 'D/: ....'`,
-        type: "notification",
-      };
-      this.$store.dispatch("notifications/notificationVisible", payload);
- 
+          //  this.showPopUp = true;
+
+          console.log("!!!ask new notification!!!!");
+          const payload = {
+            message: `Copy path from PC which looks like 'D/: ....'`,
+            type: "notification",
+          };
+
+          this.$store.dispatch("notificationVisible", payload);
+
           this.btnDisabled = true;
           this.btnActive = false;
         }, 2);
         console.log("ERROR");
       }
-      this.$store.dispatch("notifications/notificationVisible", {
-          message: " Copy path from PC which looks like 'D/: ....",
-          type: "notification",
-        });
-      
+      this.$store.dispatch("notificationVisible", {
+        message: " Copy path from PC which looks like 'D/: ....",
+        type: "notification",
+      });
+
       // check if showProgress is active
       if (this.btnActive === true) {
         this.makePreview();
@@ -90,11 +92,11 @@ export default {
     },
     isButtonDisabled() {
       // UNCOMMMENT for Windows!
-      const modelPathValid =
-        this.modelPath.trim() && /^[A-Z]\W+.*$/gm.test(this.modelPath);
-      const imagePathValid =
-        this.imagePath.trim() && /^[A-Z]\W+.*$/gm.test(this.imagePath);
-      return !modelPathValid || !imagePathValid;
+      // const modelPathValid =
+      //   this.modelPath.trim() && /^[A-Z]\W+.*$/gm.test(this.modelPath);
+      // const imagePathValid =
+      //   this.imagePath.trim() && /^[A-Z]\W+.*$/gm.test(this.imagePath);
+      // return !modelPathValid || !imagePathValid;
     },
 
     makePreview() {
@@ -122,12 +124,12 @@ export default {
 
 <template>
   <div class="header d-flex justify-content-center align-items-center">
-    <h2 class="bold-text  text-uppercase">Preview maker</h2>
+    <h2 class="bold-text text-uppercase">Preview maker</h2>
   </div>
 
   <div v-if="faqOpen">
     <div
-      class="modal d-flex  "
+      class="modal d-flex"
       id="exampleModal"
       tabindex="-1"
       aria-labelledby="exampleModalLabel"
@@ -246,7 +248,7 @@ export default {
               </button>
             </div>
 
-            <div v-if="!showProgress" class="preview-window mt-5">
+            <div v-if="!showProgress" class="preview-window   p-3">
               <!-- show progress status -->
               <div v-if="$store.state.scriptRunning">
                 <progressBar> </progressBar>
@@ -332,6 +334,7 @@ input {
 
 .preview-window {
   background-color: #f1f1f1;
+  min-width: 350px;
   margin-top: 10px;
   padding-top: 10px;
   margin-bottom: 40px;

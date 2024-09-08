@@ -9,16 +9,25 @@ const store = createStore({
       modelsList: [],
       scriptRunning: false,
       title: "",
+      notifications: [],
     };
   },
   mutations: {
+    addNotification(state, notification) {
+      state.notifications.push(notification);
+    },
+    removeNotification(state, notificationId) {
+      state.notifications = state.notifications.filter(
+        (notification) => notification.id !== notificationId
+      );
+    },
     setScriptRunning(state, isRunning) {
       state.scriptRunning = isRunning;
       console.log(`MUTATION::set status to scriptRunning=${isRunning}`);
-  },
+    },
     setModeslList(state, data) {
       state.modelsList = data.map((el) => {
-        console.log('!!!!!!!!!!!!!!!!')
+        console.log("!!!!!!!!!!!!!!!!");
         if (typeof el === "object") return el;
         return {
           name: el,
@@ -29,12 +38,10 @@ const store = createStore({
       });
     },
     modelImage(state, data) {
-
       state.modelsList = state.modelsList.map((el) => {
         if (el.name !== data.modelName) return el;
         el.title = data.title;
         el.image = data.image;
-        console.log ("99999999")
         return el;
       });
     },
@@ -42,11 +49,10 @@ const store = createStore({
       state.modelsList = state.modelsList.map((el) => {
         if (el.name !== modelName) return el;
         el.ready = true;
-        console.log ("0000000")
         return el;
       });
     },
-  
+
     pathSaveModel(state, modelPath) {
       state.pathModel = modelPath;
     },
@@ -54,13 +60,27 @@ const store = createStore({
     pathSaveImage(state, imagePath) {
       state.imagePath = imagePath;
     },
- 
   },
   actions: {
+    notificationVisible({ commit }, payload) {
+      const id = Date.now();
+      const notification = {
+        id,
+        message: payload.message,
+        isVisible: true,
+      };
+
+      commit("addNotification", notification);
+      console.log("vuex store notificationVisible", id, payload.message);
+
+      setTimeout(() => {
+        commit("removeNotification", id);
+        console.log("remove notification", id);
+      }, 1000);
+    },
     async makePreview({ commit }, data) {
       await window.ipcRenderer.startScript(data);
       console.log("STORE:: makePreview from store/ELECTRON");
-
 
       commit("pathSaveModel", data.modelPath);
       console.log("commmit Model store/ELECTRON");
@@ -74,7 +94,7 @@ const store = createStore({
         console.log("STORE::onScriptRunning", isRunning);
         commit("setScriptRunning", isRunning);
       });
- 
+
       window.ipcRenderer.onModelImage((data) => {
         store.commit("modelImage", data);
         console.log(data);

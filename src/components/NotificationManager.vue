@@ -6,10 +6,12 @@ export default {
   components: {
     AlertComponent,
   },
-  
   computed: {
-    ...mapState("notifications", ["notifications"]),
+    ...mapState(["notifications"]),  // Убираем пространство имен, так как всё в одном store
   },
+  // computed: {
+  //   ...mapState("notifications", ["notifications"]),
+  // },
 };
 </script>
 
