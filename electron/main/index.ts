@@ -121,10 +121,7 @@ app.whenReady().then(() => {
         const recached = [];
         if (cache) { 
           try {
-            // Проверка существования файлов модели:  
-            // Пропуск отсутствующих файлов:  
-            // Чтение и конвертация изображения:  
-            // Добавление в массив recached:  
+            // Проверка существования файлов модели; Пропуск отсутствующих файлов:  ; Чтение и конвертация изображения:  ; Добавление в массив recached:  
 
             for (let i = 0; i < cache.length; i++) {
               const filePathsToCheck = [
@@ -151,9 +148,7 @@ app.whenReady().then(() => {
             }
           } catch (err) {
             console.log("problem", err);
-          }
-         // console.log('BACK::recached',recached);
-         // console.log("BACK:: NEXT_cache",cache);
+          } 
 
           if (!softScan && !hardScan) {
             event.sender.send("modelsListEvent", recached);
@@ -190,6 +185,11 @@ app.whenReady().then(() => {
             })),
             ...completeList,
           ];
+
+          // const nextCache = [
+          //   ...recached,
+          //   ...completeList,
+          // ];
           console.log(nextCache);
 
           fs.writeFileSync(cachePath, JSON.stringify(nextCache));

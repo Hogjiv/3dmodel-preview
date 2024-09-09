@@ -9,18 +9,15 @@ export async function ScanFiles(modelPath, excluded = []) {
     files = await readdir(modelPath);
     const uniqueFiles = new Set();
 
-    // Обрабатываем имена файлов, удаляя нежелательные части
     const replacedFiles = files
+      .filter(file => /\.(rar|7z|zip)$/i.test(file)) // Фильтруем только архивы
       .map((file) =>
         file
-          // Удаляем все, что идет после расширения файла, включая любые слова или пробелы
           .replace(/[-(].*|\s+.*$/gi, "")
-          // Удаляем расширения и любые пробелы перед ними
-          .replace(/\.(rar|7z|zip|jpeg|png|jpg)$/i, "")
+          .replace(/\.(rar|7z|zip)$/i, "")
           .trim()
       )
       .filter((file) => {
-        // Пропускаем исключенные и повторяющиеся файлы
         if (excluded.includes(file)) {
           return false;
         }
