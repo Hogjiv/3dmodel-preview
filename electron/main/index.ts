@@ -42,7 +42,7 @@ const indexHtml = path.join(RENDERER_DIST, "index.html");
 async function createWindow() {
   win = new BrowserWindow({
     title: "Main window",
-    icon: " exit.png",
+    icon: "PM_logo.png",
     // icon: path.join(process.env.VITE_PUBLIC,  "./vite.svg" ), 
     width: 600,
     height: 750,

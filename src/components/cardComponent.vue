@@ -38,7 +38,7 @@ containter {
   width: 350px;
   height: 380px;
   min-width: 350px;
-  min-height: 380px;
+  min-height: 390px;
   max-width: 350px;
   max-height: 380px;
   background-color:#dfdfdf;

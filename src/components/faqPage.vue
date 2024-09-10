@@ -3,6 +3,8 @@ export default {
   data() {
     return {
       showFaqContent: false,
+      currentLanguage: 'ENG',
+      visible: false,
     };
   },
   emits: ["btnClosed"],
@@ -11,7 +13,9 @@ export default {
       this.showFaqContent = !this.showFaqContent;
       this.$emit("btnClosed"); 
     },
-    
+    switchLang(lang) {
+      this.currentLanguage = lang; 
+    }
   },
 };
 </script>
@@ -31,14 +35,19 @@ export default {
             />
           </div>
 
-          <h3
-            class="text-center justify-content-center align-items-center d-flex w-100"
+       
+        </div>
+        <h3
+            class="text-center justify-content-center d-flex  w-100  "
           >
             How to use a script
           </h3>
-        </div>
+        <div class="d-flex flex-row  justify-content-center">         
+        <button class="lang-btn mx-2" @click="switchLang('ENG')"> ENG </button>
+        <button class="lang-btn mx-2"@click="switchLang('RUS')">   RUS </button>
+      </div>
 
-        <div>
+        <div v-if="currentLanguage === 'ENG'">
           <p class="font-color-pink font-color-pink text-uppercase mb-3 m-3">
             Take a preview of any model and make your work simpler and faster!
           </p>
@@ -66,11 +75,41 @@ export default {
           </p>
           </p>
         </div>
+
+       
+          <div v-if="currentLanguage === 'RUS'">
+            <p class="font-color-pink text-uppercase mb-3 m-3">
+              Просмотрите любой модель и сделайте свою работу проще и быстрее!
+            </p>
+            <p>
+              1. Выберите директорию с вашими моделями. <br />
+              2. Выберите директорию для сохранения превью. <br />
+              3. Для первого сканирования выберите
+              <b class="font-color-pink">ЖЁСТКОЕ СКАНИРОВАНИЕ</b>. Эта опция сканирует все
+              файлы и сохраняет данные для офлайн-доступа, даже без интернета.
+              <br />
+              4. Используйте <b class="font-color-pink">МЯГКОЕ СКАНИРОВАНИЕ</b>, если вы уже
+              сканировали раньше или внесли изменения (например, добавили или удалили файлы).
+              Оно обновит файл данных для точных превью. <br />
+              5. После выбора Жёсткого или Мягкого Сканирования нажмите кнопку
+              <b class="font-color-pink">Запустить Скрипт</b>. Проверяйте прогресс через "Показать прогресс". <br />
+              6. Появится таблица отсканированных моделей. Сканирование может занять время, а
+              прогресс отображается на полосе прогресса над таблицей. <br />
+              7. <b class="font-color-pink">Не удаляйте файл scan.JSON в вашей папке.</b>
+              <br />
+              <p class="mt-3"> 
+              * Поддерживаются как архивированные, так и неархивированные файлы. <br />
+              ** Иногда сканирование занимает больше времени, если сайт плохо реагирует; возможно, потребуется перезагрузить и попробовать снова.
+            </p>
+            </p>
+          </div>
+    
       </div> 
   </div>
 </template>
 
 <style>
+ 
 .pic {
   right: 10px !important;
   top: 10px !important;
@@ -79,26 +118,13 @@ export default {
 }
  
  
-.pp {
-  max-width: 450px;
-  height: 100%;
+.lang-btn {
+  cursor: pointer;
+  border: #888888 2px solid;
+  border-radius: 8px;
+  width: 100px;
+  height: 30px;
 }
-
-.ii {
-  background-color: aquamarine;
-}
- 
-/* .screen-block
-{
-  background-color: rgba(0, 0, 0, 0.359);
-  height: 100vh;
-  width: 100vw;
-}  */
-
-/* .screen-block {
-  right: 0px;
-  max-width: 450px;
-} */
 
 .faqContent {
   position: absolute;

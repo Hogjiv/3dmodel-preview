@@ -1,8 +1,16 @@
 <script>
 export default {
   name: "footerComponent",
- 
+  data() {
+    return {
+      currentYear: new Date().getFullYear(), // Инициализируем текущий год
+    };
+  },
 };
+
+
+ 
+
 </script>
 
 <template>
@@ -11,7 +19,8 @@ export default {
       <a href="mailto:hogjiv@gmail.com">
         hhyperplace@gmail.com </a> <br>
       donation to PayPal <u> hogjiv01@gmail.com </u> <br>
-      Copyright Irina Avdeyeva | 2024
+      Copyright Irina Avdeyeva    <p> {{ currentYear }} </p>
+
     </div> 
 </template>
 
