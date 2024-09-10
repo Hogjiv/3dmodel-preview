@@ -28,6 +28,17 @@ export default {
   created() {
     this.$store.dispatch("electronConnect");
   },
+  computed: {
+    selectedScan: {
+      get() {
+        return this.softScan ? 'soft' : 'hard';
+      },
+      set(value) {
+        this.softScan = value === 'soft';
+        this.hardScan = value === 'hard';
+      }
+    }
+  },
 
   components: {
     footerComponent,
@@ -153,11 +164,11 @@ export default {
               class="d-flex flex-column col-lg-2 col-md-12 col-sm-12 col-12 justify-content-center align-items-center mt-3 mb-3 order-lg-1 order-sm-2 order-2 mt-4 mt-md-4 mt-lg-0"
             >
               <div class="d-flex mb-3 mb-md-3 mb-lg-3">
-                <checkBox v-model="softScan" />
+                <checkBox v-model="selectedScan" name="scanType" value="soft" />
                 <p class="font-size-16 mx-2">Soft scan</p>
               </div>
               <div class="d-flex">
-                <checkBox v-model="hardScan" />
+                <checkBox v-model="selectedScan" name="scanType" value="hard" />
                 <p class="font-size-16 mx-1">Hard scan</p>
               </div>
             </div>
@@ -248,7 +259,7 @@ export default {
               </button>
             </div>
 
-            <div v-if="!showProgress" class="preview-window   p-3">
+            <div v-if="!showProgress" class="preview-window  p-3 ">
               <!-- show progress status -->
               <div v-if="$store.state.scriptRunning">
                 <progressBar> </progressBar>

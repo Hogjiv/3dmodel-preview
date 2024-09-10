@@ -23,11 +23,11 @@ const store = createStore({
     },
     setScriptRunning(state, isRunning) {
       state.scriptRunning = isRunning;
-      console.log(`MUTATION::set status to scriptRunning=${isRunning}`);
+      console.log(`MUTATION::set status to !! scriptRunning=${isRunning}`);
     },
     setModeslList(state, data) {
       state.modelsList = data.map((el) => {
-        console.log("!!!!!!!!!!!!!!!!");
+        console.log("  MUTATION:: setModeslList,  ", data);
         if (typeof el === "object") return el;
         return {
           name: el,
@@ -38,6 +38,7 @@ const store = createStore({
       });
     },
     modelImage(state, data) {
+      console.log("  MUTATION:: modelImage ", data);
       state.modelsList = state.modelsList.map((el) => {
         if (el.name !== data.modelName) return el;
         el.title = data.title;
@@ -46,6 +47,7 @@ const store = createStore({
       });
     },
     modelReady(state, modelName) {
+      console.log("  MUTATION:: modelReady ", modelName);
       state.modelsList = state.modelsList.map((el) => {
         if (el.name !== modelName) return el;
         el.ready = true;
@@ -59,6 +61,7 @@ const store = createStore({
 
     pathSaveImage(state, imagePath) {
       state.imagePath = imagePath;
+
     },
   },
   actions: {
@@ -91,8 +94,9 @@ const store = createStore({
 
     electronConnect({ commit }) {
       window.ipcRenderer.onScriptRunning((isRunning) => {
-        console.log("STORE::onScriptRunning", isRunning);
+      
         commit("setScriptRunning", isRunning);
+        console.log("STORE::onScriptRunning", isRunning);
       });
 
       window.ipcRenderer.onModelImage((data) => {
@@ -102,6 +106,7 @@ const store = createStore({
 
       window.ipcRenderer.onModelSaved((modelName) => {
         store.commit("modelReady", modelName);
+        console.log("STORE::setModeslList");
       });
 
       window.ipcRenderer.onModelList((list) => {

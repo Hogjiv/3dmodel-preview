@@ -79,6 +79,8 @@ async function createWindow() {
 app.whenReady().then(() => {
   // Обработка вызова из рендер-процесса
   ipcMain.handle("startScriptEvent", async (event, data) => {
+
+    
     console.log('BACK::start');
     try {
       await startScript(data);
@@ -101,21 +103,53 @@ app.whenReady().then(() => {
  
 
         let cache = [];  
+//combine
+const cachePath = path.join(imagePath, "scan.json"); // Лучше использовать path.join для кросс-платформенной совместимости
 
-        const cachePath = `${imagePath}/scan.json`;
+if (fs.existsSync(cachePath)) {
+  try {
+    if (softScan === false && hardScan === true) {
+      cache = [];
+    } else if (hardScan === false) {
+      cache = JSON.parse(fs.readFileSync(cachePath, 'utf8')); // Чтение файла с явной кодировкой
+    }
+  } catch (err) {
+    console.error("SERVER reading cache error!", cachePath, err);
+    cache = null;
+  }
+}
 
-        if (fs.existsSync(cachePath)) {
-          try {
-            if (!softScan && hardScan) {
-              cache = [];
-            } else if (!hardScan) {
-              cache = JSON.parse(fs.readFileSync(cachePath, 'utf8'));
-            }
-          } catch (err) {
-            console.log("SERVER reading cache error!", cachePath, err);
-            cache = null;
-          }
-        }
+        //old
+   
+      //  const cachePath = imagePath + "/scan.json"; 
+      //  if (fs.existsSync(cachePath)) {
+      //     try {
+      //       if (softScan === false && hardScan === true) {
+      //         cache = [];
+      //       }
+      //       if (hardScan === false) {
+      //         cache = JSON.parse(fs.readFileSync(cachePath).toString());
+      //       }
+      //     } catch (err) {
+      //       console.log("SERVER reading cache error!", cachePath, err);
+      //       cache = null;
+      //     }
+      //   }
+
+        //new
+            // const cachePath = `${imagePath}/scan.json`;
+        // if (fs.existsSync(cachePath)) {
+        //   try {
+        //     if (!softScan && hardScan) {
+        //       cache = [];
+        //     } else if (!hardScan) {
+        //       cache = JSON.parse(fs.readFileSync(cachePath, 'utf8'));
+        //     }
+        //   } catch (err) {
+        //     console.log("SERVER reading cache error!", cachePath, err);
+        //     cache = null;
+        //   }
+        // }
         console.log("BACK::cache",cache);
 
         const recached = [];
@@ -149,11 +183,16 @@ app.whenReady().then(() => {
           } catch (err) {
             console.log("problem", err);
           } 
+          console.log('BACK::STEP 1', cache);
+          console.log('BACK::STEP 2', recached);
 
           if (!softScan && !hardScan) {
             event.sender.send("modelsListEvent", recached);
-          
+            console.log('?????BACK::recached', recached);
+            
             event.sender.send("scriptRunningEvent", false);
+
+            console.log('?????BACK:scriptRunningEvent');
             return;
           }
 
@@ -176,7 +215,7 @@ app.whenReady().then(() => {
             titleText,
             event.sender
           );
-
+          console.log("!!!!The completeList",completeList);
           const nextCache = [
             ...recached.map((el) => ({
               model: el.model,
@@ -186,11 +225,12 @@ app.whenReady().then(() => {
             ...completeList,
           ];
 
+
           // const nextCache = [
           //   ...recached,
           //   ...completeList,
           // ];
-          console.log(nextCache);
+          console.log("!!!!The next cahs is nextCache",nextCache);
 
           fs.writeFileSync(cachePath, JSON.stringify(nextCache));
           console.log("BACK:: wait writing to json..");
