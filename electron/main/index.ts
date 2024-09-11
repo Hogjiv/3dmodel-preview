@@ -155,6 +155,7 @@ if (fs.existsSync(cachePath)) {
         const recached = [];
         if (cache) { 
           try {
+            console.log('<<<<<<<BACK::Current Cache>>>>>:', cache); 
             // Проверка существования файлов модели; Пропуск отсутствующих файлов:  ; Чтение и конвертация изображения:  ; Добавление в массив recached:  
 
             for (let i = 0; i < cache.length; i++) {
@@ -162,10 +163,15 @@ if (fs.existsSync(cachePath)) {
                 `${modelPath}/${cache[i].model}`,
                 `${modelPath}/${cache[i].model}.zip`,
                 `${modelPath}/${cache[i].model}.rar`,
+                `${modelPath}/${cache[i].model}.7z`,
               ];
               const modelExists = filePathsToCheck.some((path) => fs.existsSync(path));
               const imgExists = fs.existsSync(cache[i].path);
 
+
+              console.log('проверяем существование файлов модели modelExists:' , modelExists);
+              console.log('проверяем существование файлов модели imgExists:',  imgExists);
+              console.log('проверяем существование файлов модели filePathsToCheck:', filePathsToCheck );
               //if models doesn't exist, skip
               if (!modelExists) continue;
               if (!imgExists) continue;
@@ -202,7 +208,7 @@ if (fs.existsSync(cachePath)) {
               : []),
             "scan.json", ".DS_Store"
           ];
-          console.log( "BACK::excluded files are:", excluded);
+          console.log( "BACK::excluded files are:-----------", excluded);
 
           const modelsList = await ScanFiles(modelPath, excluded);
           console.log(modelsList, "BACK:: modelsList from ScanFiles function"); 

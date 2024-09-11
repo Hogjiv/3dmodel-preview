@@ -45,17 +45,43 @@ export async function fetchData(modelsList, imagePath, titleText, eventSender) {
   for (const model of modelsList) {
     let imageFound = false;
 
+    // try {
+    //   await postData(model);
+    // } catch (err) {
+    //   console.error(`Error processing model ${model}:`, err);
+    // }
+ 
     try {
-      await postData(model);
+      await postDataWithRetry(model, 2); // Попробуем 3 раза
     } catch (err) {
       console.error(`Error processing model ${model}:`, err);
     }
 
+    // Функция для отправки запроса с попытками повторить при ошибке
+    async function postDataWithRetry(model, retries, delay = 3000) {
+      for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+          await postData(model);
+          break; // Если запрос успешен, выходим из цикла
+        } catch (error) {
+          if (attempt === retries) {
+            throw error; // Если исчерпали попытки, выбрасываем ошибку
+          }
+          console.warn(`Attempt ${attempt} failed for model ${model}, retrying in ${delay / 1000} seconds...`);
+          await new Promise((resolve) => setTimeout(resolve, delay)); // Ждём перед следующей попыткой
+        }
+      }
+    }
     async function postData(model) {
       try {
         const response = await axios.post("https://3ddd.ru/api/models", {
           query: model,
-        });
+        },
+        {
+          timeout: 30000, // Установить таймаут в 10 секунд (10000 миллисекунд)
+        }
+      );
+      console.log(`Received response for model: ${model}`);
         console.log(`Received response for model: ${model}`);
 
         const backends3dd = [
@@ -104,7 +130,7 @@ export async function fetchData(modelsList, imagePath, titleText, eventSender) {
 
             const imageResponse = await axios.get(fullImageUrl, {
               responseType: "arraybuffer",
-              timeout: 40000,
+              timeout: 30000,
             });
 
             const imageBinaryData = imageResponse.data;

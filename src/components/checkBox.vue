@@ -1,11 +1,11 @@
 <script>
 export default {
   props: {
-    modelValue: String, // Это свойство для связи с v-model
-    name: String, // Добавляем prop для имени группы радиокнопок
-    value: String // Добавляем prop для значения этой кнопки
+    modelValue: String,  
+    name: String, 
+    value: String  
   },
-  emits: ['update:modelValue'], // Это событие для обновления значения
+  emits: ['update:modelValue'],  
   computed: {
     isChecked() {
       return this.modelValue === this.value;
@@ -13,7 +13,7 @@ export default {
   },
   methods: {
     onClick() {
-      this.$emit('update:modelValue', this.value); // Отправляем значение этой кнопки
+      this.$emit('update:modelValue', this.value);  
     }
   }
 };
@@ -25,8 +25,7 @@ export default {
       class="checkbox d-flex" 
       @click="onClick"
       :style="{ backgroundColor: isChecked ? '#C97191' : '#F0EEF0' }"
-    >
-      <!-- Текстовый элемент убран -->
+    > 
     </div>
   </div>
 </template>

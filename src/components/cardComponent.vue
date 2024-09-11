@@ -12,9 +12,9 @@ export default {
         v-for="model in $store.state.modelsList"
         :key="model.name"
       >
-        <img class="model-image my-3" v-if="model.image" :src="model.image" />
+        <img class="model-image my-2" v-if="model.image" :src="model.image" />
         <p class="font-size-14 font-color-dark medium-text text-center">
-          {{ model.name }}
+          {{ model.model }}
         </p>
         <p class="font-size-14 font-color-pink text-center medium-text">
           {{ model.title }}
@@ -38,7 +38,7 @@ containter {
   width: 350px;
   height: 380px;
   min-width: 350px;
-  min-height: 390px;
+  min-height: 30px;
   max-width: 350px;
   max-height: 380px;
   background-color:#dfdfdf;
