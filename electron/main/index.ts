@@ -3,32 +3,27 @@ import { fileURLToPath } from "url";
 import path from "path";
 import os from "os";
 import fs from "fs";
-import { ScanFiles, fetchData } from "../../src/logic.js";
+import { fetchData } from "../../src/getData.js";
+import { ScanFiles } from "../../src/scanFiles.js";
+
 import jimp from "jimp";
 
-// Определение текущей директории
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Установка корневой директории приложения
 process.env.APP_ROOT = path.join(__dirname, "../..");
 
-// Пути к дистрибутивам приложения
 export const MAIN_DIST = path.join(process.env.APP_ROOT, "dist-electron");
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, "dist");
 export const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
 
-// Установка публичного пути в зависимости от наличия VITE_DEV_SERVER_URL
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, "public")
   : RENDERER_DIST;
 
-// Отключение аппаратного ускорения на определенных версиях Windows
 if (os.release().startsWith("6.1")) app.disableHardwareAcceleration();
 
-// Настройка идентификатора модели пользователя для Windows
 if (process.platform === "win32") app.setAppUserModelId(app.getName());
 
-// Проверка на наличие второго экземпляра приложения
 if (!app.requestSingleInstanceLock()) {
   app.quit();
   process.exit(0);
@@ -38,12 +33,11 @@ let win = null;
 const preload = path.join(__dirname, "../preload/index.mjs");
 const indexHtml = path.join(RENDERER_DIST, "index.html");
 
-// Асинхронная функция для создания окна приложения
 async function createWindow() {
   win = new BrowserWindow({
     title: "Main window",
     icon: "PM_logo.png",
-    // icon: path.join(process.env.VITE_PUBLIC,  "./vite.svg" ), 
+    // icon: path.join(process.env.VITE_PUBLIC,  "./vite.svg" ),
     width: 600,
     height: 750,
     minWidth: 450,
@@ -51,37 +45,33 @@ async function createWindow() {
     webPreferences: {
       preload,
       contextIsolation: true, // Рекомендуется для безопасности
-      nodeIntegration: false,  // Должно быть отключено в продакшене
+      nodeIntegration: false, // Должно быть отключено в продакшене
     },
   });
-
-  // Загрузка URL или файла в зависимости от режима разработки
+  win.setMenu(null);
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL);
-    win.webContents.openDevTools();  
+
+    //@This! comment for build
+   win.webContents.openDevTools();
   } else {
     win.loadFile(indexHtml);
   }
 
-  // Обработка завершения загрузки страницы
   win.webContents.on("did-finish-load", () => {
     win?.webContents.send("main-process-message", new Date().toLocaleString());
   });
 
-  // Обработка открытия внешних ссылок в браузере
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith("https:")) shell.openExternal(url);
     return { action: "deny" };
   });
 }
 
-// Инициализация приложения после его готовности
 app.whenReady().then(() => {
   // Обработка вызова из рендер-процесса
   ipcMain.handle("startScriptEvent", async (event, data) => {
-
-    
-    console.log('BACK::start');
+    console.log("BACK::start");
     try {
       await startScript(data);
     } catch (err) {
@@ -90,7 +80,7 @@ app.whenReady().then(() => {
 
     // Основная логика обработки скрипта
     async function startScript(data) {
-      console.log('BACK::startScript', data);
+      console.log("BACK::startScript", data);
       try {
         event.sender.send("scriptRunningEvent", true);
         const {
@@ -100,63 +90,30 @@ app.whenReady().then(() => {
           softScan = false,
           hardScan = true,
         } = data;
- 
 
-        let cache = [];  
-//combine
-const cachePath = path.join(imagePath, "scan.json"); // Лучше использовать path.join для кросс-платформенной совместимости
+        let cache = [];
+        const cachePath = path.join(imagePath, "scan.json");
 
-if (fs.existsSync(cachePath)) {
-  try {
-    if (softScan === false && hardScan === true) {
-      cache = [];
-    } else if (hardScan === false) {
-      cache = JSON.parse(fs.readFileSync(cachePath, 'utf8')); // Чтение файла с явной кодировкой
-    }
-  } catch (err) {
-    console.error("SERVER reading cache error!", cachePath, err);
-    cache = null;
-  }
-}
+        if (fs.existsSync(cachePath)) {
+          try {
+            if (softScan === false && hardScan === true) {
+              cache = [];
+            } else if (hardScan === false) {
+              cache = JSON.parse(fs.readFileSync(cachePath, "utf8"));
+            }
+          } catch (err) {
+            console.error("SERVER reading cache error!", cachePath, err);
+            cache = null;
+          }
+        }
 
-        //old
-   
-      //  const cachePath = imagePath + "/scan.json"; 
-      //  if (fs.existsSync(cachePath)) {
-      //     try {
-      //       if (softScan === false && hardScan === true) {
-      //         cache = [];
-      //       }
-      //       if (hardScan === false) {
-      //         cache = JSON.parse(fs.readFileSync(cachePath).toString());
-      //       }
-      //     } catch (err) {
-      //       console.log("SERVER reading cache error!", cachePath, err);
-      //       cache = null;
-      //     }
-      //   }
-
-        //new
-            // const cachePath = `${imagePath}/scan.json`;
-        // if (fs.existsSync(cachePath)) {
-        //   try {
-        //     if (!softScan && hardScan) {
-        //       cache = [];
-        //     } else if (!hardScan) {
-        //       cache = JSON.parse(fs.readFileSync(cachePath, 'utf8'));
-        //     }
-        //   } catch (err) {
-        //     console.log("SERVER reading cache error!", cachePath, err);
-        //     cache = null;
-        //   }
-        // }
-        console.log("BACK::cache",cache);
+        console.log("BACK::cache", cache);
 
         const recached = [];
-        if (cache) { 
+        if (cache) {
           try {
-            console.log('<<<<<<<BACK::Current Cache>>>>>:', cache); 
-            // Проверка существования файлов модели; Пропуск отсутствующих файлов:  ; Чтение и конвертация изображения:  ; Добавление в массив recached:  
+            console.log("BACK::Current Cache:", cache);
+            // Checking for existence of model files; Skipping missing files: ; Reading and converting an image: ; Adding to the recached array:
 
             for (let i = 0; i < cache.length; i++) {
               const filePathsToCheck = [
@@ -165,13 +122,23 @@ if (fs.existsSync(cachePath)) {
                 `${modelPath}/${cache[i].model}.rar`,
                 `${modelPath}/${cache[i].model}.7z`,
               ];
-              const modelExists = filePathsToCheck.some((path) => fs.existsSync(path));
+              const modelExists = filePathsToCheck.some((path) =>
+                fs.existsSync(path)
+              );
               const imgExists = fs.existsSync(cache[i].path);
 
-
-              console.log('проверяем существование файлов модели modelExists:' , modelExists);
-              console.log('проверяем существование файлов модели imgExists:',  imgExists);
-              console.log('проверяем существование файлов модели filePathsToCheck:', filePathsToCheck );
+              console.log(
+                "проверяем существование файлов модели modelExists:",
+                modelExists
+              );
+              console.log(
+                "проверяем существование файлов модели imgExists:",
+                imgExists
+              );
+              console.log(
+                "проверяем существование файлов модели filePathsToCheck:",
+                filePathsToCheck
+              );
               //if models doesn't exist, skip
               if (!modelExists) continue;
               if (!imgExists) continue;
@@ -188,17 +155,17 @@ if (fs.existsSync(cachePath)) {
             }
           } catch (err) {
             console.log("problem", err);
-          } 
-          console.log('BACK::STEP 1', cache);
-          console.log('BACK::STEP 2', recached);
+          }
+          console.log("BACK::STEP 1", cache);
+          console.log("BACK::STEP 2", recached);
 
           if (!softScan && !hardScan) {
             event.sender.send("modelsListEvent", recached);
-            console.log('?????BACK::recached', recached);
-            
+            console.log("?????BACK::recached", recached);
+
             event.sender.send("scriptRunningEvent", false);
 
-            console.log('?????BACK:scriptRunningEvent');
+            console.log("?????BACK:scriptRunningEvent");
             return;
           }
 
@@ -206,12 +173,13 @@ if (fs.existsSync(cachePath)) {
             ...(softScan && recached.length
               ? recached.map((el) => el.model)
               : []),
-            "scan.json", ".DS_Store"
+            "scan.json",
+            ".DS_Store",
           ];
-          console.log( "BACK::excluded files are:-----------", excluded);
+          console.log("BACK::excluded files are:", excluded);
 
           const modelsList = await ScanFiles(modelPath, excluded);
-          console.log(modelsList, "BACK:: modelsList from ScanFiles function"); 
+          console.log(modelsList, "BACK:: modelsList from ScanFiles function");
 
           event.sender.send("modelsListEvent", [...recached, ...modelsList]);
 
@@ -221,7 +189,7 @@ if (fs.existsSync(cachePath)) {
             titleText,
             event.sender
           );
-          console.log("!!!!The completeList",completeList);
+          console.log("!!!!The completeList", completeList);
           const nextCache = [
             ...recached.map((el) => ({
               model: el.model,
@@ -231,12 +199,7 @@ if (fs.existsSync(cachePath)) {
             ...completeList,
           ];
 
-
-          // const nextCache = [
-          //   ...recached,
-          //   ...completeList,
-          // ];
-          console.log("!!!!The next cahs is nextCache",nextCache);
+          console.log("!!!!The next cahs is nextCache", nextCache);
 
           fs.writeFileSync(cachePath, JSON.stringify(nextCache));
           console.log("BACK:: wait writing to json..");
@@ -251,29 +214,14 @@ if (fs.existsSync(cachePath)) {
     return data;
   });
 
-  // Обработка вызова для сканирования файлов
-  // ipcMain.handle("scan-files", async (event, modelPath) => {
-  //   try {
-  //     const files = await ScanFiles(modelPath);
-  //     console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!erase?')
-  //     return files;
-  //   } catch (error) {
-  //     console.error("Error scanning files:", error);
-  //     throw error;
-  //   }
-  // });
-
-  // Вызов создания окна теперь происходит только после app.whenReady()
   createWindow();
 });
 
-// Обработка закрытия всех окон
 app.on("window-all-closed", () => {
   win = null;
   if (process.platform !== "darwin") app.quit();
 });
 
-// Обработка повторного запуска приложения
 app.on("second-instance", () => {
   if (win) {
     if (win.isMinimized()) win.restore();
@@ -281,7 +229,6 @@ app.on("second-instance", () => {
   }
 });
 
-// Обработка активации приложения (для macOS)
 app.on("activate", () => {
   const allWindows = BrowserWindow.getAllWindows();
   if (allWindows.length) {
@@ -291,7 +238,6 @@ app.on("activate", () => {
   }
 });
 
-// Обработка запроса системной информации
 ipcMain.handle("getSystemInfo", async () => {
   return {
     platform: os.platform(),
@@ -300,7 +246,6 @@ ipcMain.handle("getSystemInfo", async () => {
   };
 });
 
-// Пример обработчика получения данных пользователя
 ipcMain.handle("getUserData", async () => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -313,7 +258,6 @@ ipcMain.handle("getUserData", async () => {
   });
 });
 
-// Обработка открытия нового окна
 ipcMain.handle("open-win", (_, arg) => {
   const childWindow = new BrowserWindow({
     webPreferences: {

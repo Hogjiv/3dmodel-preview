@@ -4,39 +4,45 @@ import checkBox from "../components/checkBox.vue";
 import faqPage from "../components/faqPage.vue";
 import footerComponent from "../components/footerComponent.vue";
 import cardComponent from "../components/cardComponent.vue";
+ import scrollTop from "../components/scrollTop.vue";
+
+//const os = require('os');
 
 export default {
   data() {
     return {
       showProgress: false,
-      modelPath: "/Users/hogjiv/test",
-      imagePath: "/Users/hogjiv/test",
+      modelPath: "",
+      imagePath: "",
       preview: true,
       showMore: false,
       state2: true,
       softScan: false,
       hardScan: true,
       faqOpen: false,
-      showMessage: false,
-      showPopUp: false,
+      showMessage: false, 
       disabled: false,
       btnActive: false,
       btnDisabled: false,
+      
     };
   },
-
+ 
   created() {
     this.$store.dispatch("electronConnect");
   },
   computed: {
     selectedScan: {
       get() {
-        return this.softScan ? 'soft' : 'hard';
+        return this.softScan ? "soft" : "hard";
       },
       set(value) {
-        this.softScan = value === 'soft';
-        this.hardScan = value === 'hard';
-      }
+        this.softScan = value === "soft";
+        this.hardScan = value === "hard";
+      },
+    },
+    pageLength() {
+      
     }
   },
 
@@ -46,6 +52,7 @@ export default {
     faqPage,
     progressBar,
     checkBox,
+    scrollTop
   },
   watch: {
     "$store.state.scriptRunning"(newVal) {
@@ -56,6 +63,9 @@ export default {
     },
   },
   methods: {
+   
+     
+     
     btnClosed() {
       console.log("BTNCLOSED from other comp");
       this.faqOpen = false;
@@ -66,13 +76,10 @@ export default {
       if (!this.isButtonDisabled()) {
         console.log("fields are correct");
         this.btnActive = true;
-        this.btnDisabled = false;
-        this.showPopUp = false;
-      } else {
-        this.showPopUp = false;
+        this.btnDisabled = false; 
+      } else { 
 
-        setTimeout(() => {
-          //  this.showPopUp = true;
+        setTimeout(() => { 
 
           console.log("!!!ask new notification!!!!");
           const payload = {
@@ -102,12 +109,20 @@ export default {
       }
     },
     isButtonDisabled() {
-      // UNCOMMMENT for Windows!
-      // const modelPathValid =
-      //   this.modelPath.trim() && /^[A-Z]\W+.*$/gm.test(this.modelPath);
-      // const imagePathValid =
-      //   this.imagePath.trim() && /^[A-Z]\W+.*$/gm.test(this.imagePath);
-      // return !modelPathValid || !imagePathValid;
+      // Определение платформы через модуль os
+      // const platform = os.platform();
+      // const isWindows = platform === 'win32';
+      // const isMac = platform === 'darwin';
+      // console.log("!!!!!&&&&&&&&&&&&&&&&&$$$$$$$$$$$$$$$$",os.type());
+      // console.log("!!!!!&&&&&&&&&&&&&&&&&$$$$$$$$$$$$$$$$",platform)
+      // if (isWindows) {
+      //   const modelPathValid =
+      //     this.modelPath.trim() && /^[A-Z]:\\.*$/gm.test(this.modelPath);
+      //   const imagePathValid =
+      //     this.imagePath.trim() && /^[A-Z]:\\.*$/gm.test(this.imagePath);
+      //   return !modelPathValid || !imagePathValid;
+      // }
+      // return false;
     },
 
     makePreview() {
@@ -137,7 +152,7 @@ export default {
   <div class="header d-flex justify-content-center align-items-center">
     <h2 class="bold-text text-uppercase">Preview maker</h2>
   </div>
-
+  
   <div v-if="faqOpen">
     <div
       class="modal d-flex"
@@ -259,7 +274,7 @@ export default {
               </button>
             </div>
 
-            <div v-if="!showProgress" class="preview-window  p-3 ">
+            <div v-if="!showProgress" class="preview-window p-3">
               <!-- show progress status -->
               <div v-if="$store.state.scriptRunning">
                 <progressBar> </progressBar>
@@ -270,12 +285,14 @@ export default {
               >
                 Finish!
               </h2>
-
-              <cardComponent class="pp"> </cardComponent>
+              <cardComponent> </cardComponent>
               　
             </div>
           </div>
+          <scrollTop > </scrollTop>
         </div>
+       
+ 
       </div>
     </div>
     　 <footerComponent class="footer"> </footerComponent>　
@@ -283,6 +300,7 @@ export default {
 </template>
 
 <style>
+ 
 .faq-btn {
   cursor: pointer;
   border: #888888 2px solid;
@@ -298,20 +316,7 @@ export default {
   position: relative;
   bottom: 0px;
 }
-.popUp {
-  background-color: #7e7e7ec7;
-  max-width: 200px;
-  max-height: 100px;
-  position: absolute;
-  margin-top: 160px;
-  border-radius: 10px;
-  padding: 6px;
-  animation-name: fadeOut;
-  animation-duration: 5s;
-  animation-fill-mode: forwards;
-  z-index: 2;
-}
-
+ 
 .modal {
   background-color: rgba(0, 0, 0, 0.359);
 }

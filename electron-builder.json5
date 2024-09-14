@@ -13,7 +13,8 @@
   ],
   "mac": {
     "target": [
-      "dmg"
+      "dmg",
+      "zip"
     ],
     "icon": "public/AnyConv.com__PM_logo.icns",  
     "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
@@ -23,7 +24,8 @@
       {
         "target": "nsis",
         "arch": [
-          "x64"
+          "x64",
+          "ia32"
         ]
       }
     ],

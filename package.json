@@ -20,10 +20,14 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build && electron-builder",
-    "preview": "vite preview"
-  },
+  "dev": "vite",
+  "build": "vue-tsc --noEmit && vite build && electron-builder",
+  "preview": "vite preview",
+  "build:win": "electron-builder --win",
+  "build:mac": "electron-builder --mac",
+  "build:linux": "electron-builder --linux",
+  "build:all": "electron-builder"
+},
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
     "electron": "^29.1.1",
