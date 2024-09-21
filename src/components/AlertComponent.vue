@@ -48,8 +48,7 @@ export default {
  
 .alert-container {
   width: 100%;
-  display: flex;
-
+  display: flex; 
   justify-content: center;  
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
 }
@@ -63,7 +62,7 @@ export default {
 
   background-color: #7e7e7ec7;
   min-width: 300px;
-  min-height: 80px;
+  min-height: 25px;
   position: absolute;
   margin-top: 60px;
   border-radius: 10px;
@@ -71,12 +70,6 @@ export default {
   animation-name: fadeOut;
   animation-duration: 5s;
   animation-fill-mode: forwards;
-  z-index: 2;
-  /* align-items: center;
-  background-color: rgba(139, 62, 62, 0.9);
-  min-width: 500px;
-  height: 40px;
-  border-radius: 5px;
-  z-index: 9999; */
+  z-index: 2; 
 }
 </style>

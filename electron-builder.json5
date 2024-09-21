@@ -16,7 +16,7 @@
       "dmg",
       "zip"
     ],
-    "icon": "public/AnyConv.com__PM_logo.icns",  
+    "icon": "public/PM_logo.icns",  
     "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
   },
   "win": {
@@ -29,7 +29,7 @@
         ]
       }
     ],
-    "icon": "public/PM_logo.png",
+    "icon": "public/PM_logo_mac.png",
     "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
   },
   "nsis": {

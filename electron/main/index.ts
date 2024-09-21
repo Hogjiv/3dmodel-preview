@@ -202,7 +202,7 @@ app.whenReady().then(() => {
           console.log("!!!!The next cahs is nextCache", nextCache);
 
           fs.writeFileSync(cachePath, JSON.stringify(nextCache));
-          console.log("BACK:: wait writing to json..");
+          console.log("BACK:: wait writing to json..",nextCache);
 
           event.sender.send("scriptRunningEvent", false);
         }

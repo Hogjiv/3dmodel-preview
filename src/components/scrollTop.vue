@@ -3,31 +3,55 @@ export default {
   name: "ScrollTop",
   data() {
     return {
-      isVisible: false,
+      scrollVisible: false,
     };
   },
-  methods: {
-    handleScroll() {
-      const scrollHeight = document.documentElement.scrollHeight;
-      const clientHeight = document.documentElement.clientHeight;
-     // const scrollTop = window.scrollY || document.documentElement.scrollTop;
-
-      // Показываем кнопку только если есть скролл и прокручено более 100px
-    
-      this.isVisible = (scrollHeight > clientHeight) && (scrollTop > 900);
-    
+  props: {
+    showProgress: {
+      type: Boolean,
+      required: true,
     },
-    scrollToTop() {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
+  }, 
+  methods: {
+  handleScroll() {
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = document.documentElement.clientHeight;
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+ 
+    //console.log('scrollHeight:', scrollHeight, 'clientHeight:', clientHeight, 'scrollTop:', scrollTop, 'showProgress:', this.showProgress);
+ 
+    if (clientHeight < 0) {
+      this.scrollVisible = (scrollHeight > clientHeight) && (scrollTop > 0) && !this.showProgress;
+    } else {
+      this.scrollVisible = false;  
     }
+ 
+    if (scrollTop === 0 && this.showProgress) {
+      this.scrollVisible = false;  
+    }
+ 
+    //console.log('scrollVisible:', this.scrollVisible);
   },
+  scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  },
+
+
+  scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+},
+
+
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
-    window.addEventListener("resize", this.handleScroll);
-    // Вызываем handleScroll сразу после монтирования, чтобы учесть начальное состояние
+    window.addEventListener("resize", this.handleScroll); 
     this.$nextTick(this.handleScroll);
   },
   beforeUnmount() {
@@ -39,11 +63,11 @@ export default {
 
 <template>
   <div
-    v-show="isVisible"
+    v-show="scrollVisible"
     @click="scrollToTop"
-    class="scroll-element mt-lg-6 mb-3 mx-4 d-flex justify-content-center align-items-center"
+    class="scroll-element mt-lg-6 mb-3 mx-4 d-flex justify-content-center align-self-center align-items-center"
   >
-    <img src="/arrow.svg" width="32" height="32" alt="Scroll to top">
+    <img src="/arrow.svg" class="mb-2" width="32" height="32" alt="Scroll to top">
   </div>
 </template>
 
@@ -64,5 +88,5 @@ export default {
 .scroll-element:hover {
   opacity: 0.8;
 }
-</style> 
+</style>
  

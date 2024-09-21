@@ -37,7 +37,7 @@ export async function fetchData(modelsList, imagePath, titleText, eventSender) {
       const response = await axios.post(
         "https://3ddd.ru/api/models",
         { query: model },
-        { timeout: 60000 } // Установить таймаут в 60 секунд
+        { timeout: 60000 }  
       );
       
       console.log(`Received response for model: ${model}`);
@@ -49,18 +49,29 @@ export async function fetchData(modelsList, imagePath, titleText, eventSender) {
       ];
 
       const modelData = response.data.data.models[0];
+      //if image not found
+
       if (!modelData) {
         console.log(`No model data found for model: ${model}`);
-        const defaultImageUrl = fs.readFileSync("./src/assets/noImageFound.jpg");
+     const defaultImageUrl = fs.readFileSync("./src/assets/noImageFound.jpg");
+const newImagePath = `${imagePath}/noImageFound.jpg`;
+fs.writeFileSync(newImagePath, defaultImageUrl);
+
+     
+//        const defaultImageUrl = fs.readFileSync("./src/assets/noImageFound.jpg");
         const imgBase64 = Buffer.from(defaultImageUrl, "binary").toString("base64");
+
+        
         eventSender.send("modelImageEvent", {
           modelName: model,
           title: "Model not found",
-          image: "data:image/png;base64," + imgBase64,
+          image: "./src/assets/noImageFound.jpg",
+          
         });
         const imageName = "noImageFound.jpg";
-        const newImagePath = `${imagePath}/${imageName}`;
+     //   const newImagePath = `${imagePath}/${imageName}`;
         result.push({ model, title: "NO TITLE", path: newImagePath });
+        
         return;
       }
 
@@ -89,7 +100,7 @@ export async function fetchData(modelsList, imagePath, titleText, eventSender) {
 
           const imageResponse = await axios.get(fullImageUrl, {
             responseType: "arraybuffer",
-            timeout: 60000, // Установить таймаут в 60 секунд
+            timeout: 60000,  
           });
 
           const imageBinaryData = imageResponse.data;

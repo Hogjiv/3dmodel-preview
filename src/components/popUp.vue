@@ -33,7 +33,7 @@ export default {
  
 .popUpBtn {
     width: 25px;
-    height: 25px;
+    height: 18px;
     background-color: rgb(154, 154, 154);
     border-radius: 5px;
 }

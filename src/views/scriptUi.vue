@@ -5,9 +5,7 @@ import faqPage from "../components/faqPage.vue";
 import footerComponent from "../components/footerComponent.vue";
 import cardComponent from "../components/cardComponent.vue";
  import scrollTop from "../components/scrollTop.vue";
-
-//const os = require('os');
-
+ 
 export default {
   data() {
     return {
@@ -24,10 +22,11 @@ export default {
       disabled: false,
       btnActive: false,
       btnDisabled: false,
-      
+      scrollTop: false
     };
   },
  
+
   created() {
     this.$store.dispatch("electronConnect");
   },
@@ -91,7 +90,7 @@ export default {
 
           this.btnDisabled = true;
           this.btnActive = false;
-        }, 2);
+        }, 3);
         console.log("ERROR");
       }
       this.$store.dispatch("notificationVisible", {
@@ -110,19 +109,12 @@ export default {
     },
     isButtonDisabled() {
       // Определение платформы через модуль os
-      // const platform = os.platform();
-      // const isWindows = platform === 'win32';
-      // const isMac = platform === 'darwin';
-      // console.log("!!!!!&&&&&&&&&&&&&&&&&$$$$$$$$$$$$$$$$",os.type());
-      // console.log("!!!!!&&&&&&&&&&&&&&&&&$$$$$$$$$$$$$$$$",platform)
-      // if (isWindows) {
-      //   const modelPathValid =
-      //     this.modelPath.trim() && /^[A-Z]:\\.*$/gm.test(this.modelPath);
-      //   const imagePathValid =
-      //     this.imagePath.trim() && /^[A-Z]:\\.*$/gm.test(this.imagePath);
-      //   return !modelPathValid || !imagePathValid;
-      // }
-      // return false;
+     // UNCOMMMENT for Windows!
+      // const modelPathValid =
+      //   this.modelPath.trim() && /^[A-Z]\W+.*$/gm.test(this.modelPath);
+      // const imagePathValid =
+      //   this.imagePath.trim() && /^[A-Z]\W+.*$/gm.test(this.imagePath);
+      // return !modelPathValid || !imagePathValid;
     },
 
     makePreview() {
@@ -152,7 +144,10 @@ export default {
   <div class="header d-flex justify-content-center align-items-center">
     <h2 class="bold-text text-uppercase">Preview maker</h2>
   </div>
-  
+  <!-- <scroll-top v-if="!showProgress" :showProgress="showProgress"></scroll-top> -->
+
+  <scroll-top v-if="!showProgress && btnActive"   :showProgress="showProgress" ></scroll-top>
+
   <div v-if="faqOpen">
     <div
       class="modal d-flex"
@@ -249,13 +244,9 @@ export default {
                     : "Make previews!"
                 }}
               </p>
-            </button>
-            <!-- <div class="popUp" v-if="showPopUp">
-              Copy path from PC which looks like 'D/: ....'
-            </div> -->
+            </button> 
           </div>
-
-          <!-- all block with images (if btnActive) -->
+ 
           <div v-if="btnActive" class="yy container w-100">
             <!-- Show progress => show less BTN -->
             <div
@@ -289,7 +280,7 @@ export default {
               　
             </div>
           </div>
-          <scrollTop > </scrollTop>
+      
         </div>
        
  
@@ -344,9 +335,6 @@ btn-faq:active {
   background-color: #c97191;
 }
 
-input {
-  text-align: center;
-}
 
 .preview-window {
   background-color: #f1f1f1;
@@ -393,6 +381,11 @@ p {
   border-style: none;
   outline: none;
 }
+
+input {
+  text-align: center;
+}
+
 
 .btn:hover p {
   color: #ffffff;

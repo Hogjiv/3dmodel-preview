@@ -40,12 +40,14 @@ const store = createStore({
     modelImage(state, data) {
       console.log("  MUTATION:: modelImage ", data);
       state.modelsList = state.modelsList.map((el) => {
-        if (el.name !== data.modelName) return el;
-        el.title = data.title;
-        el.image = data.image;
-        return el;
+          if (el.name !== data.modelName) return el;
+          el.title = data.title || "NO TITLE"; // Убедитесь, что вы присваиваете значение по умолчанию
+          el.image = data.image || "./src/assets/noImageFound.jpg"; // Убедитесь, что путь по умолчанию верный
+          console.log("DATA DATA)))))))))))))", data);
+          return el;
       });
-    },
+  },
+  
     modelReady(state, modelName) {
       console.log("  MUTATION:: modelReady ", modelName);
       state.modelsList = state.modelsList.map((el) => {
@@ -79,7 +81,7 @@ const store = createStore({
       setTimeout(() => {
         commit("removeNotification", id);
         console.log("remove notification", id);
-      }, 1000);
+      }, 2000);
     },
     async makePreview({ commit }, data) {
       await window.ipcRenderer.startScript(data);
