@@ -29,7 +29,7 @@
         ]
       }
     ],
-    "icon": "public/PM_logo_mac.png",
+    "icon": "public/PM_logo.png",
     "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
   },
   "nsis": {

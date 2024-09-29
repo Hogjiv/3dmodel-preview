@@ -71,32 +71,35 @@ export default {
     },
 
     btnClicked() {
-      // checking if fields are correct
-      if (!this.isButtonDisabled()) {
-        console.log("fields are correct");
-        this.btnActive = true;
+      this.btnActive = true;
         this.btnDisabled = false; 
-      } else { 
 
-        setTimeout(() => { 
+      // checking if fields are correct
+      // if (!this.isButtonDisabled()) {
+      //   console.log("fields are correct");
+      //   this.btnActive = true;
+      //   this.btnDisabled = false; 
+      // } else { 
 
-          console.log("!!!ask new notification!!!!");
-          const payload = {
-            message: `Copy path from PC which looks like 'D/: ....'`,
-            type: "notification",
-          };
+      //   setTimeout(() => { 
 
-          this.$store.dispatch("notificationVisible", payload);
+      //     console.log("!!!ask new notification!!!!");
+      //     const payload = {
+      //       message: `Copy path from PC which looks like 'D/: ....'`,
+      //       type: "notification",
+      //     };
 
-          this.btnDisabled = true;
-          this.btnActive = false;
-        }, 3);
-        console.log("ERROR");
-      }
-      this.$store.dispatch("notificationVisible", {
-        message: " Copy path from PC which looks like 'D/: ....",
-        type: "notification",
-      });
+      //     this.$store.dispatch("notificationVisible", payload);
+
+      //     this.btnDisabled = true;
+      //     this.btnActive = false;
+      //   }, 3);
+      //   console.log("ERROR");
+      // }
+      // this.$store.dispatch("notificationVisible", {
+      //   message: " Copy path from PC which looks like 'D/: ....",
+      //   type: "notification",
+      // });
 
       // check if showProgress is active
       if (this.btnActive === true) {
@@ -146,7 +149,7 @@ export default {
   </div>
   <!-- <scroll-top v-if="!showProgress" :showProgress="showProgress"></scroll-top> -->
 
-  <scroll-top v-if="!showProgress && btnActive"   :showProgress="showProgress" ></scroll-top>
+  <scrollTop v-if="!showProgress && btnActive"   :showProgress="showProgress" ></scrollTop>
 
   <div v-if="faqOpen">
     <div

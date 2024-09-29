@@ -37,11 +37,11 @@ export async function fetchData(modelsList, imagePath, titleText, eventSender) {
       const response = await axios.post(
         "https://3ddd.ru/api/models",
         { query: model },
-        { timeout: 60000 }  
+        { timeout: 60000 }
       );
-      
+
       console.log(`Received response for model: ${model}`);
-      
+
       const backends3dd = [
         "https://b5.3ddd.ru/media/cache/tuk_model_custom_filter_ang_ru/",
         "https://b6.3ddd.ru/media/cache/tuk_model_custom_filter_ang_ru/",
@@ -51,27 +51,30 @@ export async function fetchData(modelsList, imagePath, titleText, eventSender) {
       const modelData = response.data.data.models[0];
       //if image not found
 
+      
       if (!modelData) {
         console.log(`No model data found for model: ${model}`);
-     const defaultImageUrl = fs.readFileSync("./src/assets/noImageFound.jpg");
-const newImagePath = `${imagePath}/noImageFound.jpg`;
-fs.writeFileSync(newImagePath, defaultImageUrl);
+        const defaultImageUrl = fs.readFileSync(
+          "./src/assets/noImageFound.jpg"
+        );
+         
+        // const safeModelName = model.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        // const newImagePath = `${imagePath}/${safeModelName}.jpg`;
+        const newImagePath = `${imagePath}/${model}.jpg`;
+        fs.writeFileSync(newImagePath, defaultImageUrl);
 
-     
-//        const defaultImageUrl = fs.readFileSync("./src/assets/noImageFound.jpg");
-        const imgBase64 = Buffer.from(defaultImageUrl, "binary").toString("base64");
+        const imgBase64 = Buffer.from(defaultImageUrl, "binary").toString(
+          "base64"
+        );
 
-        
         eventSender.send("modelImageEvent", {
           modelName: model,
           title: "Model not found",
-          image: "./src/assets/noImageFound.jpg",
-          
+          image: "./src/assets/noImageFound.jpg", // Используем оригинальный путь для отображения
         });
-        const imageName = "noImageFound.jpg";
-     //   const newImagePath = `${imagePath}/${imageName}`;
-        result.push({ model, title: "NO TITLE", path: newImagePath });
         
+        result.push({ model, title: "NO TITLE", path: newImagePath });
+
         return;
       }
 
@@ -90,7 +93,10 @@ fs.writeFileSync(newImagePath, defaultImageUrl);
           const imageNameMatch = fullImageUrl.match(rxName);
           const imageName = imageNameMatch && imageNameMatch[1];
           if (!imageName) {
-            console.error("Failed to extract image name from URL:", fullImageUrl);
+            console.error(
+              "Failed to extract image name from URL:",
+              fullImageUrl
+            );
             continue;
           }
 
@@ -100,7 +106,7 @@ fs.writeFileSync(newImagePath, defaultImageUrl);
 
           const imageResponse = await axios.get(fullImageUrl, {
             responseType: "arraybuffer",
-            timeout: 60000,  
+            timeout: 60000,
           });
 
           const imageBinaryData = imageResponse.data;
@@ -137,7 +143,7 @@ fs.writeFileSync(newImagePath, defaultImageUrl);
   }
 
   function isSocketError(error) {
-    return error.code === 'ECONNRESET' || error.code === 'ECONNABORTED';
+    return error.code === "ECONNRESET" || error.code === "ECONNABORTED";
   }
 
   return result;
