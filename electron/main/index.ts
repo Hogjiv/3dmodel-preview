@@ -51,9 +51,10 @@ async function createWindow() {
   win.setMenu(null);
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL);
-
-    //@This! comment for build
-   win.webContents.openDevTools();
+    
+   //@This! comment for build
+    
+    // win.webContents.openDevTools(); // Закомментируйте эту строку, чтобы отключить консоль
   } else {
     win.loadFile(indexHtml);
   }

@@ -138,7 +138,7 @@ export default {
 
 <template>
   <div class="header d-flex justify-content-center align-items-center">
-    <h2 class="bold-text text-uppercase">Preview maker2</h2>
+    <h2 class="bold-text text-uppercase">Preview maker</h2>
   </div> 
 
   <scrollTop
