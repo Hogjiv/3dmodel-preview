@@ -4,8 +4,8 @@ import checkBox from "../components/checkBox.vue";
 import faqPage from "../components/faqPage.vue";
 import footerComponent from "../components/footerComponent.vue";
 import cardComponent from "../components/cardComponent.vue";
- import scrollTop from "../components/scrollTop.vue";
- 
+import scrollTop from "../components/scrollTop.vue";
+
 export default {
   data() {
     return {
@@ -18,14 +18,13 @@ export default {
       softScan: false,
       hardScan: true,
       faqOpen: false,
-      showMessage: false, 
+      showMessage: false,
       disabled: false,
       btnActive: false,
       btnDisabled: false,
-      scrollTop: false
+      scrollTop: false,
     };
   },
- 
 
   created() {
     this.$store.dispatch("electronConnect");
@@ -40,9 +39,7 @@ export default {
         this.hardScan = value === "hard";
       },
     },
-    pageLength() {
-      
-    }
+    pageLength() {},
   },
 
   components: {
@@ -51,7 +48,7 @@ export default {
     faqPage,
     progressBar,
     checkBox,
-    scrollTop
+    scrollTop,
   },
   watch: {
     "$store.state.scriptRunning"(newVal) {
@@ -62,9 +59,6 @@ export default {
     },
   },
   methods: {
-   
-     
-     
     btnClosed() {
       console.log("BTNCLOSED from other comp");
       this.faqOpen = false;
@@ -72,16 +66,16 @@ export default {
 
     btnClicked() {
       this.btnActive = true;
-        this.btnDisabled = false; 
+      this.btnDisabled = false;
 
       // checking if fields are correct
       // if (!this.isButtonDisabled()) {
       //   console.log("fields are correct");
       //   this.btnActive = true;
-      //   this.btnDisabled = false; 
-      // } else { 
+      //   this.btnDisabled = false;
+      // } else {
 
-      //   setTimeout(() => { 
+      //   setTimeout(() => {
 
       //     console.log("!!!ask new notification!!!!");
       //     const payload = {
@@ -111,8 +105,7 @@ export default {
       }
     },
     isButtonDisabled() {
-      // Определение платформы через модуль os
-     // UNCOMMMENT for Windows!
+      // UNCOMMMENT for Windows!
       // const modelPathValid =
       //   this.modelPath.trim() && /^[A-Z]\W+.*$/gm.test(this.modelPath);
       // const imagePathValid =
@@ -145,11 +138,13 @@ export default {
 
 <template>
   <div class="header d-flex justify-content-center align-items-center">
-    <h2 class="bold-text text-uppercase">Preview maker</h2>
-  </div>
-  <!-- <scroll-top v-if="!showProgress" :showProgress="showProgress"></scroll-top> -->
+    <h2 class="bold-text text-uppercase">Preview maker2</h2>
+  </div> 
 
-  <scrollTop v-if="!showProgress && btnActive"   :showProgress="showProgress" ></scrollTop>
+  <scrollTop
+    v-if="!showProgress && btnActive"
+    :showProgress="showProgress"
+  ></scrollTop>
 
   <div v-if="faqOpen">
     <div
@@ -225,9 +220,7 @@ export default {
 
         <!-- main container -->
         <div class="d-flex flex-column w-100">
-          <!-- <div
-        class="containter tt d-flex flex-column justify-content-center align-items-center"
-      >  -->
+        
           <!-- Big Btn block -->
           <div class="d-flex justify-content-center align-items-center">
             <button
@@ -247,9 +240,9 @@ export default {
                     : "Make previews!"
                 }}
               </p>
-            </button> 
+            </button>
           </div>
- 
+
           <div v-if="btnActive" class="yy container w-100">
             <!-- Show progress => show less BTN -->
             <div
@@ -283,10 +276,7 @@ export default {
               　
             </div>
           </div>
-      
         </div>
-       
- 
       </div>
     </div>
     　 <footerComponent class="footer"> </footerComponent>　
@@ -294,7 +284,6 @@ export default {
 </template>
 
 <style>
- 
 .faq-btn {
   cursor: pointer;
   border: #888888 2px solid;
@@ -310,7 +299,7 @@ export default {
   position: relative;
   bottom: 0px;
 }
- 
+
 .modal {
   background-color: rgba(0, 0, 0, 0.359);
 }
@@ -337,7 +326,6 @@ export default {
 btn-faq:active {
   background-color: #c97191;
 }
-
 
 .preview-window {
   background-color: #f1f1f1;
@@ -388,7 +376,6 @@ p {
 input {
   text-align: center;
 }
-
 
 .btn:hover p {
   color: #ffffff;

@@ -41,8 +41,8 @@ const store = createStore({
       console.log("  MUTATION:: modelImage ", data);
       state.modelsList = state.modelsList.map((el) => {
           if (el.name !== data.modelName) return el;
-          el.title = data.title || "NO TITLE"; // Убедитесь, что вы присваиваете значение по умолчанию
-          el.image = data.image || "./src/assets/noImageFound.jpg"; // Убедитесь, что путь по умолчанию верный
+          el.title = data.title || "NO TITLE"; 
+          el.image = data.image || "./src/assets/noImageFound.jpg";  
           console.log("DATA DATA)))))))))))))", data);
           return el;
       });
