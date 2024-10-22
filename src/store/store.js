@@ -38,18 +38,30 @@ const store = createStore({
       });
     },
     modelImage(state, data) {
-      console.log("  MUTATION:: modelImage ", data);
+      console.log("MUTATION:: modelImage ", data);
       state.modelsList = state.modelsList.map((el) => {
           if (el.name !== data.modelName) return el;
-          el.title = data.title || "NO TITLE"; 
-          // the stroke below for all images
-          el.image = data.image 
-         // el.image = data.image || "./noImageFound.jpg";  
-          console.log("DATA DATA)))))))))))))", data);
-          return el;
+          return {
+              ...el,
+              title: data.title || "Model not found",
+              image: data.image,
+              ready: true
+          };
       });
   },
-  
+    // modelImage(state, data) {
+    //   console.log("  MUTATION:: modelImage ", data);
+    //   state.modelsList = state.modelsList.map((el) => {
+    //     if (el.name !== data.modelName) return el;
+    //     el.title = data.title || "NO TITLE";
+    //     // the stroke below for all images
+    //     el.image = data.image;
+    //     // el.image = data.image || "./noImageFound.jpg";
+    //     console.log("DATA DATA)))))))))))))", data);
+    //     return el;
+    //   });
+    // },
+
     modelReady(state, modelName) {
       console.log("  MUTATION:: modelReady ", modelName);
       state.modelsList = state.modelsList.map((el) => {
@@ -65,7 +77,6 @@ const store = createStore({
 
     pathSaveImage(state, imagePath) {
       state.imagePath = imagePath;
-
     },
   },
   actions: {
@@ -98,7 +109,6 @@ const store = createStore({
 
     electronConnect({ commit }) {
       window.ipcRenderer.onScriptRunning((isRunning) => {
-      
         commit("setScriptRunning", isRunning);
         console.log("STORE::onScriptRunning", isRunning);
       });

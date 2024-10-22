@@ -54,7 +54,7 @@ async function createWindow() {
     
    //@This! comment for build
     
-  win.webContents.openDevTools(); // Закомментируйте эту строку, чтобы отключить консоль
+  //win.webContents.openDevTools(); // Закомментируйте эту строку, чтобы отключить консоль
   } else {
     win.loadFile(indexHtml);
   }
