@@ -42,7 +42,9 @@ const store = createStore({
       state.modelsList = state.modelsList.map((el) => {
           if (el.name !== data.modelName) return el;
           el.title = data.title || "NO TITLE"; 
-          el.image = data.image || "./src/assets/noImageFound.jpg";  
+          // the stroke below for all images
+          el.image = data.image 
+         // el.image = data.image || "./noImageFound.jpg";  
           console.log("DATA DATA)))))))))))))", data);
           return el;
       });
