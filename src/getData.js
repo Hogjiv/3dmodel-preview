@@ -9,7 +9,7 @@ export async function fetchData(modelsList, imagePath, titleText, eventSender) {
   async function handleNotFoundCase(model, notFoundImage) {
     try {
       // Generate unique filename for each not found case
-      const newImagePath = `${imagePath}/notFound_${model}.png`;
+      const newImagePath = `${imagePath}/${model}_notFound.png`;
       
       // Convert base64 to buffer
       const notFoundBase64 = notFoundImage.replace(/^data:image\/jpeg;base64,/, "");
